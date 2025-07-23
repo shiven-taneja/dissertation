@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drl-utrans"
+version = "0.0.1"
+description = "Re-implementation of DRL-UTrans: U-Net + Transformer for stock trading"
+authors = [{ name = "Shiven Taneja", email = "shiven.taneja@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.2",
+    "pandas>=2.0",
+    "numpy>=1.25",
+    "yfinance>=0.2",
+    "matplotlib",
+    "scipy",          
+]
+
+[tool.setuptools.package-data]
+
+"drl_utrans.configs" = ["*.yaml"]

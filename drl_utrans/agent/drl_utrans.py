@@ -1,42 +1,12 @@
 import random
-from collections import deque
-from typing import Optional, Tuple, Deque
+from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from models.utrans import UTransModel
-
-class ReplayMemory:
-    """Experience replay buffer for storing transitions."""
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.buffer: Deque = deque(maxlen=capacity)
-    
-    def push(self, state: torch.Tensor, action: int, weight: float,
-             reward: float, next_state: torch.Tensor, done: bool):
-        """Store a transition (state, action, weight, reward, next_state, done)."""
-        # Store CPU tensors to avoid GPU memory leak
-        self.buffer.append((state.cpu().detach(), action, weight,
-                             reward, next_state.cpu().detach(), done))
-    
-    def sample(self, batch_size: int):
-        """Randomly sample a batch of transitions from memory."""
-        batch = random.sample(self.buffer, batch_size)
-        # Unzip batch of transitions
-        states, actions, weights, rewards, next_states, dones = zip(*batch)
-        # Stack into tensors
-        states_t     = torch.stack(states)
-        actions_t    = torch.tensor(actions, dtype=torch.long)
-        weights_t    = torch.tensor(weights, dtype=torch.float32)
-        rewards_t    = torch.tensor(rewards, dtype=torch.float32)
-        next_states_t = torch.stack(next_states)
-        dones_t      = torch.tensor(dones, dtype=torch.bool)
-        return states_t, actions_t, weights_t, rewards_t, next_states_t, dones_t
-    
-    def __len__(self) -> int:
-        return len(self.buffer)
+from drl_utrans.models.utrans import UTransModel
+from drl_utrans.agent.replay import ReplayMemory
 
 class DrlUTransAgent:
     """
@@ -83,9 +53,9 @@ class DrlUTransAgent:
         # Counter for training steps (for target network updates)
         self.train_steps = 0
         # Compile model for performance (PyTorch 2.x)
-        if hasattr(torch, 'compile'):
-            self.policy_net = torch.compile(self.policy_net)
-            self.target_net = torch.compile(self.target_net)
+        # if hasattr(torch, 'compile'):
+        #     self.policy_net = torch.compile(self.policy_net)
+        #     self.target_net = torch.compile(self.target_net)
 
     def select_action(self, state: torch.Tensor) -> Tuple[int, float]:
         """

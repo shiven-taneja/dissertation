@@ -1,13 +1,3 @@
-data:
-  ticker: AAPL
-  start: 2010-01-01
-  end: 2025-01-01
-  train_csv: data/{ticker}_train.csv
-  test_csv:  data/{ticker}_test.csv
-  split_date: 2018-01-01
-  commission_rate: 0.001
-  investment_capacity: 500
-
 model:
   window_size: 12
   feature_dim: 14     # do not change unless indicators file changes

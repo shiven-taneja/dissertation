@@ -23,14 +23,14 @@ from drl_utrans.envs.single_stock import PaperSingleStockEnv
 from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
-# ───────────────────────────── CLI ──────────────────────────────
-def cli():
-    p = argparse.ArgumentParser()
-    p.add_argument("--cfg", type=Path, default="drl_utrans/configs/defaults.yaml")
-    p.add_argument("--ckpt", type=Path, required=True, help="checkpoint .pt from train.py")
-    p.add_argument("--ticker", help="override ticker in cfg")
-    p.add_argument("--outdir", type=Path, default=Path("results"))
-    return p.parse_args()
+# # ───────────────────────────── CLI ──────────────────────────────
+# def cli():
+#     p = argparse.ArgumentParser()
+#     p.add_argument("--cfg", type=Path, default="drl_utrans/configs/defaults.yaml")
+#     p.add_argument("--ckpt", type=Path, required=True, help="checkpoint .pt from train.py")
+#     p.add_argument("--ticker", help="override ticker in cfg")
+#     p.add_argument("--outdir", type=Path, default=Path("results"))
+#     return p.parse_args()
 
 
 # ─────────────────────────── evaluation ─────────────────────────
@@ -48,13 +48,12 @@ def run_episode(env: PaperSingleStockEnv, agent: DrlUTransAgent, already_reset: 
     return np.asarray(equity_curve)
 
 
-def main():
-    args = cli()
-    cfg = merge_cli(load_cfg(args.cfg), args)
-    ticker = cfg["data"]["ticker"]
+def main(ticker, test_csv, ckpt_path, commission_rate = 0.001, investment_capacity = 500):
+    cfg = load_cfg(Path("drl_utrans/configs/defaults.yaml"))
+    ticker = ticker
 
     # ------------- load test CSV -----------------------------
-    test_csv = Path(cfg["data"]["test_csv"].format(ticker=ticker))
+    test_csv = Path(test_csv)
     df = pd.read_csv(test_csv, index_col=0, parse_dates=True)
     feats = df[df.columns[:-1]].to_numpy(dtype=np.float32)
     prices = df["close"].to_numpy(dtype=np.float32)
@@ -64,8 +63,8 @@ def main():
         feats,
         prices,
         window_size=cfg["model"]["window_size"],
-        ic_shares=cfg["data"]["investment_capacity"],
-        commission=cfg["data"]["commission_rate"],
+        ic_shares=investment_capacity,
+        commission=commission_rate,
         train_mode=False,
     )
 
@@ -73,7 +72,7 @@ def main():
     agent = DrlUTransAgent(
         state_dim=(cfg["model"]["window_size"], cfg["model"]["feature_dim"])
     )
-    state_dict = torch.load(args.ckpt, map_location="cpu")["policy"]
+    state_dict = torch.load(ckpt_path, map_location="cpu")["policy"]
     agent.policy_net.load_state_dict(state_dict)
     agent.epsilon = 0.0  # fully greedy
 
@@ -101,7 +100,7 @@ def main():
         print(f"{k:>15}: {v:8.2f}")
 
     # ------------- save outputs ------------------------------
-    outdir = args.outdir
+    outdir = Path("results")
     outdir.mkdir(exist_ok=True)
     (outdir / "plots").mkdir(exist_ok=True)
 

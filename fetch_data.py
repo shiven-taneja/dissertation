@@ -16,38 +16,12 @@ import pandas as pd
 import yfinance as yf
 import yaml
 
+from drl_utrans.utils.cfg import load_cfg
+
 from drl_utrans.utils.indicators import make_feature_matrix, FEATURE_COLS
 
 
-def parse_cfg(cfg_path: Path):
-    with cfg_path.open("r") as f:
-        return yaml.safe_load(f)
-
-
-def cli() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ticker", default=None, help="override ticker in cfg")
-    parser.add_argument("--start", default=None, help="YYYY-MM-DD")
-    parser.add_argument("--end", default=None, help="YYYY-MM-DD")
-    parser.add_argument("--split", default=None, help="train/test split date")
-    parser.add_argument(
-        "--cfg",
-        default=Path(__file__).resolve().parents[1] / "dissertation/drl_utrans/configs/defaults.yaml",
-        type=Path,
-    )
-    parser.add_argument("--outdir", default="data", type=Path)
-    return parser.parse_args()
-
-
-def main():
-    args = cli()
-    cfg = parse_cfg(args.cfg)
-
-    ticker = args.ticker or cfg["data"]["ticker"]
-    start = args.start or cfg["data"]["start"]
-    end = args.end or cfg["data"]["end"]
-    split_date = args.split or cfg["data"]["split_date"]
-
+def main(ticker, start, end, split_date):
     print(f"Downloading {ticker} [{start} → {end}] …")
     df = yf.download(ticker, start=start, end=end, auto_adjust=True)
     df = df[["Open", "High", "Low", "Close", "Volume"]].astype(float)
@@ -65,7 +39,7 @@ def main():
 
     merged = pd.concat([feat_df, price_sr], axis=1)
 
-    outdir = args.outdir
+    outdir = Path("data")
     outdir.mkdir(parents=True, exist_ok=True)
 
     train = merged.loc[: split_date]

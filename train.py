@@ -1,15 +1,5 @@
-#!/usr/bin/env python
-"""
-End-to-end training script for DRL-UTrans.
-
-Usage example:
-    python scripts/train.py --cfg drl_utrans/configs/default.yaml \
-                            --ticker AAPL --epochs 50 --seed 42
-"""
-
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
 from statistics import mean
 from time import perf_counter
@@ -19,43 +9,22 @@ import pandas as pd
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
-from drl_utrans.utils.cfg import load_cfg, merge_cli
+from drl_utrans.utils.cfg import load_cfg
 from drl_utrans.envs.single_stock import PaperSingleStockEnv
 from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
-# ──────────────────────────────── CLI ────────────────────────────────
-def cli():
-    p = argparse.ArgumentParser()
-    p.add_argument(
-        "--cfg",
-        type=Path,
-        default=Path("drl_utrans/configs/defaults.yaml"),
-        help="YAML config",
-    )
-    p.add_argument("--ticker", help="override ticker in cfg")
-    p.add_argument("--epochs", type=int, help="override epoch count")
-    p.add_argument("--seed", type=int, help="global random seed")
-    p.add_argument("--logdir", type=Path, default=Path("runs"))
-    p.add_argument("--ckptdir", type=Path, default=Path("checkpoints"))
-    return p.parse_args()
-
-
 # ─────────────────────────────── main ────────────────────────────────
-def main():
-    args = cli()
-    cfg = merge_cli(load_cfg(args.cfg), args)
-    ticker = cfg["data"]["ticker"]
-    epochs = cfg["agent"]["epochs"]
-    seed = cfg["agent"].get("seed", None)
-
+def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 42):
+    cfg = load_cfg(Path("drl_utrans/configs/defaults.yaml"))
+    seed = seed
     # ------------- deterministic behaviour (optional) --------------
     if seed is not None:
         np.random.seed(seed)
         torch.manual_seed(seed)
 
     # ------------- load training CSV -------------------------------
-    train_csv = Path(cfg["data"]["train_csv"].format(ticker=ticker))
+    train_csv = Path(train_csv)
     if not train_csv.exists():
         raise FileNotFoundError(
             f"{train_csv} not found. Run fetch_data.py first."
@@ -69,8 +38,8 @@ def main():
         features,
         prices,
         window_size=cfg["model"]["window_size"],
-        ic_shares=cfg["data"]["investment_capacity"],
-        commission=cfg["data"]["commission_rate"],
+        ic_shares=investment_capacity,
+        commission=commission_rate,
         train_mode=True,
         seed=seed,
     )
@@ -89,9 +58,9 @@ def main():
     )
 
     # ------------- logging -----------------------------------------
-    logdir = args.logdir / f"{ticker}_seed{seed or 0}"
+    logdir = default=Path("runs") / f"{ticker}_seed{seed or 0}"
     writer = SummaryWriter(logdir.as_posix())
-    ckptdir = args.ckptdir
+    ckptdir = Path("checkpoints")
     ckptdir.mkdir(exist_ok=True)
 
     # ------------- training loop -----------------------------------
@@ -153,7 +122,18 @@ def main():
     ckpt_path = ckptdir / f"utrans_{ticker}_final.pt"
     torch.save({"policy": agent.policy_net.state_dict()}, ckpt_path)
     print("Saved checkpoint to", ckpt_path)
+    return ckpt_path
 
 
 if __name__ == "__main__":
-    main()
+    main(
+        ticker="AAPL",
+        start="2010-01-01",
+        end="2025-01-01",
+        train_csv="data/AAPL_train.csv",
+        split_date="2018-01-01",
+        commission_rate=0.001,
+        investment_capacity=500,
+        epochs=50,
+        seed=42,
+    )

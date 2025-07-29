@@ -92,14 +92,14 @@ class PaperSingleStockEnv:
         In train_mode we pick a random start index so that
         window & at least one step fit inside data.
         """
-        if self.train_mode:
-            self.ptr = self.rng.randint(self.L, self.max_ptr - 1)
-        else:  # test mode
-            if hasattr(self, "_used_once"):
-                raise RuntimeError("Test env can be run only once.")
-            self._used_once = True
-            self.ptr = self.L  # deterministic start
-
+        # if self.train_mode:
+        #     self.ptr = self.rng.randint(self.L, self.max_ptr - 1)
+        # else:  # test mode
+        #     if hasattr(self, "_used_once"):
+        #         raise RuntimeError("Test env can be run only once.")
+        #     self._used_once = True
+        #     self.ptr = self.L  # deterministic start
+        self.ptr = self.L
         # portfolio vars
         self.H = 0  # shares held
         self.I = 0.0  # invested amount $

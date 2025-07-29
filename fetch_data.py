@@ -20,6 +20,8 @@ from drl_utrans.utils.cfg import load_cfg
 
 from drl_utrans.utils.indicators import make_feature_matrix, FEATURE_COLS
 
+from feature_generation.headline_features import main as enrich_headlines
+
 
 def main(ticker, start, end, split_date):
     print(f"Downloading {ticker} [{start} → {end}] …")
@@ -38,6 +40,12 @@ def main(ticker, start, end, split_date):
     price_sr = pd.Series(closes, index=aligned_dates, name="close")
 
     merged = pd.concat([feat_df, price_sr], axis=1)
+    train_tmp = merged.loc[: split_date]
+    mu   = train_tmp[FEATURE_COLS].mean()
+    sigma= train_tmp[FEATURE_COLS].std(ddof=0)
+    merged[FEATURE_COLS] = (merged[FEATURE_COLS] - mu) / sigma
+
+    # merged = enrich_headlines(ticker, merged)
 
     outdir = Path("data")
     outdir.mkdir(parents=True, exist_ok=True)
@@ -48,6 +56,8 @@ def main(ticker, start, end, split_date):
     train.to_csv(outdir / f"{ticker}_train.csv", index=True)
     test.to_csv(outdir / f"{ticker}_test.csv", index=True)
     print("Saved", outdir / f"{ticker}_train.csv", "and test.csv")
+
+    return outdir / f"{ticker}_train.csv", outdir / f"{ticker}_test.csv"
 
 
 if __name__ == "__main__":

@@ -23,16 +23,6 @@ from drl_utrans.envs.single_stock import PaperSingleStockEnv
 from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
-# # ───────────────────────────── CLI ──────────────────────────────
-# def cli():
-#     p = argparse.ArgumentParser()
-#     p.add_argument("--cfg", type=Path, default="drl_utrans/configs/defaults.yaml")
-#     p.add_argument("--ckpt", type=Path, required=True, help="checkpoint .pt from train.py")
-#     p.add_argument("--ticker", help="override ticker in cfg")
-#     p.add_argument("--outdir", type=Path, default=Path("results"))
-#     return p.parse_args()
-
-
 # ─────────────────────────── evaluation ─────────────────────────
 def run_episode(env: PaperSingleStockEnv, agent: DrlUTransAgent, already_reset: bool = False):
     state_nd = env._state() if already_reset else env.reset()

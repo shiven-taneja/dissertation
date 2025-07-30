@@ -4,99 +4,90 @@ import torch.nn.functional as F
 
 class UTransModel(nn.Module):
     """
-    UTrans Model: Combines U-Net style encoder–decoder with a Transformer bottleneck.
-    Outputs action logits for 3 actions (buy, sell, hold) and an action weight (0–1).
-    Input: tensor of shape (batch_size, window_size, feature_dim).
+    Exact topology of U‑Trans (Yang et al., 2023).
+    Input : (B, window_size, feature_dim)
+    Output: action_logits (B,3), action_weight (B,1 in [0,1])
     """
-    def __init__(self, window_size: int = 12, feature_dim: int = 14,
-                 d_model: int = 128, nhead: int = 4):
-        super(UTransModel, self).__init__()
-        self.window_size = window_size
-        self.feature_dim = feature_dim
-        # Encoder: U-Net downsampling path
-        self.enc_conv1a = nn.Conv1d(feature_dim, 32, kernel_size=3, padding=1)
-        self.enc_conv1b = nn.Conv1d(32, 32, kernel_size=3, padding=1)
-        self.pool1 = nn.MaxPool1d(kernel_size=2)  # length 12 -> 6
-        self.enc_conv2a = nn.Conv1d(32, 64, kernel_size=3, padding=1)
-        self.enc_conv2b = nn.Conv1d(64, 64, kernel_size=3, padding=1)
-        self.pool2 = nn.MaxPool1d(kernel_size=2)  # length 6 -> 3
-        # Bottleneck: Transformer layer on compressed sequence
-        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead,
-                                                  dim_feedforward=256,
-                                                  batch_first=True)
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=1)
-        # Project downsampled features to d_model and back for Transformer
-        self.enc_project = nn.Conv1d(64, d_model, kernel_size=1)
-        self.dec_project = nn.Conv1d(d_model, 64, kernel_size=1)
-        # Decoder: U-Net upsampling path with skip connections
-        self.upconv2 = nn.ConvTranspose1d(64, 64, kernel_size=2, stride=2)  # 3 -> 6
-        self.dec_conv2a = nn.Conv1d(64 + 64, 64, kernel_size=3, padding=1)  # concat skip2  # skip connection:contentReference[oaicite:0]{index=0}
-        self.dec_conv2b = nn.Conv1d(64, 64, kernel_size=3, padding=1)
-        self.upconv1 = nn.ConvTranspose1d(64, 32, kernel_size=2, stride=2)  # 6 -> 12
-        self.dec_conv1a = nn.Conv1d(32 + 32, 32, kernel_size=3, padding=1)  # concat skip1  # skip connection:contentReference[oaicite:1]{index=1}
-        self.dec_conv1b = nn.Conv1d(32, 32, kernel_size=3, padding=1)
-        # Output heads: flatten and fully-connected layers
-        self.flatten = nn.Flatten()
-        self.out_action = nn.Linear(32 * window_size, 3)
-        self.out_weight = nn.Linear(32 * window_size, 1)
-        # Initialize weights for stable training
+    def __init__(self,
+                 window_size: int = 12,
+                 feature_dim: int = 1,
+                 d_model: int   = 256,
+                 nhead: int     = 8,
+                 ff_dim: int    = 512,
+                 dropout: float = 0.1):
+        super().__init__()
+        flat_dim = window_size * feature_dim        # 1 × T
+
+        # ---------- Encoder ----------
+        self.enc0_norm = nn.LayerNorm(flat_dim)     # Embedding norm
+        self.enc1 = nn.Linear(flat_dim, 64)
+        self.enc1_norm = nn.LayerNorm(64)
+
+        self.enc2 = nn.Linear(64, 128)
+        self.enc2_norm = nn.LayerNorm(128)
+
+        self.enc3 = nn.Linear(128, d_model)
+        self.enc3_norm = nn.LayerNorm(d_model)
+
+        # ---------- Transformer bottleneck ----------
+        enc_layer = nn.TransformerEncoderLayer(
+            d_model=d_model, nhead=nhead,
+            dim_feedforward=ff_dim,
+            dropout=dropout,
+            batch_first=True)
+        self.transformer = nn.TransformerEncoder(enc_layer, num_layers=1)
+
+        # ---------- Decoder ----------
+        self.dec1_norm = nn.LayerNorm(d_model)      # input: z + skip3
+        self.dec1 = nn.Linear(d_model, 128)
+
+        self.dec2_norm = nn.LayerNorm(128)          # input: y1 + skip2
+        self.dec2 = nn.Linear(128, 64)
+
+        self.dec3_norm = nn.LayerNorm(64)           # input: y2 + skip1
+
+        # ---------- Heads ----------
+        self.head_action = nn.Linear(64, 3)
+        self.head_weight = nn.Linear(64, 1)
+
         self._init_weights()
 
+    # ---------------------------------------------------------------
     def _init_weights(self):
-        """Initialize Conv and Linear weights (Kaiming for conv, Xavier for linear)."""
         for m in self.modules():
-            if isinstance(m, nn.Conv1d) or isinstance(m, nn.ConvTranspose1d):
-                nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
-            elif isinstance(m, nn.Linear):
-                nn.init.xavier_uniform_(m.weight)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_uniform_(m.weight, a=0, nonlinearity='relu')
+                nn.init.zeros_(m.bias)
 
-    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        # x shape: (batch, window_size, feature_dim)
-        # Permute to (batch, channels, length) for Conv1d
-        x = x.permute(0, 2, 1)  # -> (batch, feature_dim, window_size)
-        # Encoder
-        x1 = F.relu(self.enc_conv1a(x))
-        x1 = F.relu(self.enc_conv1b(x1))
-        skip1 = x1  # (batch, 32, 12), skip connection 1
-        x2 = self.pool1(x1)      # -> (batch, 32, 6)
-        x2 = F.relu(self.enc_conv2a(x2))
-        x2 = F.relu(self.enc_conv2b(x2))
-        skip2 = x2  # (batch, 64, 6), skip connection 2
-        x3 = self.pool2(x2)      # -> (batch, 64, 3)
-        # Transformer bottleneck on compressed sequence
-        x3 = self.enc_project(x3)          # (batch, d_model, 3)
-        x3 = x3.permute(0, 2, 1)           # (batch, 3, d_model)
-        x3 = self.transformer(x3)          # (batch, 3, d_model)
-        x3 = x3.permute(0, 2, 1)           # (batch, d_model, 3)
-        x3 = self.dec_project(x3)          # (batch, 64, 3)
-        # Decoder with skip connections
-        x4 = self.upconv2(x3)              # -> (batch, 64, 6)
-        # Align shapes if needed (in case of any rounding issues)
-        if x4.shape[2] != skip2.shape[2]:
-            diff = skip2.shape[2] - x4.shape[2]
-            if diff > 0:
-                x4 = F.pad(x4, (0, diff))
-            else:
-                x4 = x4[:, :, :skip2.shape[2]]
-        x4 = torch.cat([x4, skip2], dim=1)  # concat skip2 features
-        x4 = F.relu(self.dec_conv2a(x4))
-        x4 = F.relu(self.dec_conv2b(x4))    # (batch, 64, 6)
-        x5 = self.upconv1(x4)              # -> (batch, 32, 12)
-        if x5.shape[2] != skip1.shape[2]:
-            diff = skip1.shape[2] - x5.shape[2]
-            if diff > 0:
-                x5 = F.pad(x5, (0, diff))
-            else:
-                x5 = x5[:, :, :skip1.shape[2]]
-        x5 = torch.cat([x5, skip1], dim=1)  # concat skip1 features
-        x5 = F.relu(self.dec_conv1a(x5))
-        x5 = F.relu(self.dec_conv1b(x5))    # (batch, 32, 12)
-        # Flatten and produce outputs
-        flat = self.flatten(x5)            # (batch, 32*12)
-        action_logits = self.out_action(flat)       # (batch, 3) raw logits for actions
-        action_weight = torch.sigmoid(self.out_weight(flat))  # (batch, 1) in [0,1]
+    # ---------------------------------------------------------------
+    def forward(self, x):
+        # x: (B, L, F)  → flatten to (B, L·F)
+        B = x.size(0)
+        v  = self.enc0_norm(x.reshape(B, -1))
+
+        # Encoder 64
+        s1 = F.relu(self.enc1_norm(self.enc1(v)))     # skip‑1
+
+        # Encoder 128
+        s2 = F.relu(self.enc2_norm(self.enc2(s1)))    # skip‑2
+
+        # Encoder 256
+        s3 = F.relu(self.enc3_norm(self.enc3(s2)))    # skip‑3
+
+        # Transformer (sequence length = 1 token)
+        z = self.transformer(s3.unsqueeze(1)).squeeze(1)  # (B,256)
+
+        # Decoder: 256 → 128 (+ skip‑3)
+        y1 = F.relu(self.dec1(self.dec1_norm(z + s3)))
+
+        # Decoder: 128 → 64  (+ skip‑2)
+        y2 = F.relu(self.dec2(self.dec2_norm(y1 + s2)))
+
+        # Fusion: add skip‑1
+        fused = F.relu(self.dec3_norm(y2 + s1))       # (B,64)
+
+        # Heads
+        action_logits = self.head_action(fused)
+        action_weight = torch.sigmoid(self.head_weight(fused))
+
         return action_logits, action_weight

@@ -134,28 +134,33 @@ class PaperSingleStockEnv:
         # -------- BUY -------------------------------------------------- #
         if action == 0 and (self.IC - self.H) >= 100:
             B = max(100, round(((self.IC - self.H) * w) / 100) * 100)
+
             trade_val = P_t * B
             fee = trade_val * self.commission
             self.cash -= trade_val + fee
 
             self.H += B
-            self.I += trade_val + fee  # include fee in cost
+            self.I += trade_val  
             cost_basis = self._cost_basis()
-            reward = (cost_basis - P_t) * B - fee
+            reward = (cost_basis - P_t) * B 
             self.IC -= B
 
         # -------- SELL ------------------------------------------------- #
         elif action == 1 and self.H > 0:
+            cost_basis = self._cost_basis()
             S = max(100, round((self.H * w) / 100) * 100)
             S = min(S, self.H)
+
             trade_val = P_t * S
             fee = trade_val * self.commission
             self.cash += trade_val - fee
 
             self.H -= S
             self.I -= cost_basis * S  # remove cost basis of sold shares
-            reward = (P_t - cost_basis) * S - fee
+            reward = (P_t - cost_basis) * S 
+            # self.IC  += int(round(reward / P_t))
             self.IC += S
+            
 
         # -------- HOLD ------------------------------------------------- #
         elif self.H > 0:

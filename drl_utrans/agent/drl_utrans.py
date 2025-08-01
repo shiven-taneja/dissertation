@@ -5,14 +5,15 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from drl_utrans.models.utrans import UTransModel
+# from drl_utrans.models.utrans import UTransModel
+from drl_utrans.models.utrans import UTransNet
 from drl_utrans.agent.replay import ReplayMemory
 
 class DrlUTransAgent:
     """
     Deep Q-learning agent utilizing the UTrans model (policy network and target network).
     Implements experience replay, epsilon-greedy exploration, target network updates,
-    and uses Huber loss for training:contentReference[oaicite:2]{index=2}.
+    and uses Huber loss for training.
     """
     def __init__(
         self,
@@ -40,13 +41,19 @@ class DrlUTransAgent:
         else:
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         # Initialize policy and target networks
-        self.policy_net = UTransModel(window_size=self.window_size,
-                                      feature_dim=self.feature_dim).to(self.device)
-        self.target_net = UTransModel(window_size=self.window_size,
-                                      feature_dim=self.feature_dim).to(self.device)
+        # self.policy_net = UTransModel(window_size=self.window_size,
+        #                               feature_dim=self.feature_dim).to(self.device)
+        # self.target_net = UTransModel(window_size=self.window_size,
+        #                               feature_dim=self.feature_dim).to(self.device)
+
+        self.policy_net = UTransNet(window_size=self.window_size,
+                                      input_dim=self.feature_dim).to(self.device)
+        self.target_net = UTransNet(window_size=self.window_size,
+                                      input_dim=self.feature_dim).to(self.device)
+        
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
-        # Optimizer: RAdam as specified in the paper:contentReference[oaicite:3]{index=3}
+        # Optimizer: RAdam as specified in the paper
         self.optimizer = optim.RAdam(self.policy_net.parameters(), lr=lr)
         # Experience replay memory
         self.memory = ReplayMemory(memory_size)
@@ -57,26 +64,28 @@ class DrlUTransAgent:
         #     self.policy_net = torch.compile(self.policy_net)
         #     self.target_net = torch.compile(self.target_net)
 
-    def select_action(self, state: torch.Tensor) -> Tuple[int, float]:
+    def select_action(self, state: torch.Tensor, eval_mode = False) -> Tuple[int, float]:
         """
-        Choose an action (0=buy, 1=sell, 2=hold) and an action weight [0,1] using epsilon-greedy.
+        Choose an action (0=buy, 1=sell, 2=hold) and an action weight  using epsilon-greedy.
         """
         if state.dim() == 2:
             state = state.unsqueeze(0)  # add batch dimension
         state = state.to(self.device)
         # Exploration vs. exploitation
         if random.random() < self.epsilon:
-            # Explore: random action, assign weight = 0.1:contentReference[oaicite:4]{index=4}
+            
             action = random.randrange(3)
-            weight = 0.1
+            weight = random.uniform(0.1, 1.0) if action!= 2 else 0.0  # hold has no weight
         else:
             # Exploit: choose best action from policy network
             self.policy_net.eval()
             with torch.no_grad():
                 action_logits, action_weight = self.policy_net(state.float())
-            self.policy_net.train()
+            if eval_mode:
+                self.policy_net.train()
             # Select action with highest Q (logit); get weight output
-            action = int(torch.argmax(action_logits[0]).item())
+            # print(f"Action logits: {action_logits}, Action weight: {action_weight}")
+            action = int(torch.argmax(action_logits).item())
             weight = float(action_weight.item())
             if action == 2:  # if hold, weight is not used
                 weight = 0.0
@@ -130,22 +139,30 @@ class DrlUTransAgent:
     def train(self, env, num_episodes: int = 50, max_steps: Optional[int] = None):
         """
         Train the agent on the given environment for a certain number of episodes.
-        The environment should implement reset() and step((action, weight)).
+        The environment should implement reset() and step(action, weight).
         """
         for episode in range(num_episodes):
-            state = torch.from_numpy(env.reset()).float()
+            state = env.reset()  # state is a numpy array
             for t in range(max_steps or int(1e6)):
-                action, weight = self.select_action(state)
-                # Perform action in environment
-                next_state, reward, done, _ = env.step((action, weight))
+                # Convert numpy state to tensor for the policy network
+                state_tensor = torch.from_numpy(state).float()
+                action, weight = self.select_action(state_tensor)
+                
+                # Perform action in environment, passing action and weight separately
+                next_state, reward, done, _ = env.step(action, weight)
+                
+                # Convert numpy next_state to tensor for storage
                 next_state_tensor = torch.from_numpy(next_state).float()
                 reward = float(reward)
-                next_state = torch.tensor(next_state, dtype=torch.float32)
-                # Store transition and update agent
-                self.store_transition(state, action, weight, reward, next_state_tensor, done)
+
+                # Store transition and perform a training step
+                self.store_transition(state_tensor, action, weight, reward, next_state_tensor, done)
                 self.train_step()
-                state = next_state_tensor
+                
+                # Update state for the next iteration
+                state = next_state
+                
                 if done:
                     break
-            # Decay epsilon at end of episode
+            # Decay epsilon at the end of each episode
             self.decay_epsilon()

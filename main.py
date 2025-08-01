@@ -14,6 +14,9 @@ if __name__ == "__main__":
 
     train_csv, test_csv = fetch_data_main(ticker, start, end, split_date)
     ckpt_path = train_main(ticker, start, end, train_csv, split_date, commission_rate, investment_capacity, epochs=50)
+    # ckpt_path = f"checkpoints/utrans_{ticker}_final.pt"
     evaluate_main(ticker, test_csv, ckpt_path, commission_rate, investment_capacity)
 
     # Run the feature generation script
+
+ 

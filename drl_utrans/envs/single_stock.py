@@ -99,7 +99,9 @@ class PaperSingleStockEnv:
         #         raise RuntimeError("Test env can be run only once.")
         #     self._used_once = True
         #     self.ptr = self.L  # deterministic start
+
         self.ptr = self.L
+        
         # portfolio vars
         self.H = 0  # shares held
         self.I = 0.0  # invested amount $
@@ -132,39 +134,48 @@ class PaperSingleStockEnv:
         reward = 0.0
 
         # -------- BUY -------------------------------------------------- #
-        if action == 0 and (self.IC - self.H) >= 100:
-            B = max(100, round(((self.IC - self.H) * w) / 100) * 100)
+        if action == 0:
+            if self.IC - self.H <= 100:
+                action = 2
+            else:
+                B = max(100, round(((self.IC - self.H) * w) / 100) * 100)
 
-            trade_val = P_t * B
-            fee = trade_val * self.commission
-            self.cash -= trade_val + fee
+                trade_val = P_t * B
+                fee = trade_val * self.commission
+                self.cash -= trade_val + fee
 
-            self.H += B
-            self.I += trade_val  
-            cost_basis = self._cost_basis()
-            reward = (cost_basis - P_t) * B 
-            self.IC -= B
+                self.H += B
+                self.I += trade_val  
+                cost_basis = self._cost_basis()
+                reward = (cost_basis - P_t) * B 
+                self.IC -= B
 
         # -------- SELL ------------------------------------------------- #
-        elif action == 1 and self.H > 0:
-            cost_basis = self._cost_basis()
-            S = max(100, round((self.H * w) / 100) * 100)
-            S = min(S, self.H)
+        elif action == 1:
+            if self.H <= 0: # no shares to sell
+                action = 2
+            else:
+                cost_basis = self._cost_basis()
+                S = max(100, round((self.H * w) / 100) * 100)
+                S = min(S, self.H)
 
-            trade_val = P_t * S
-            fee = trade_val * self.commission
-            self.cash += trade_val - fee
+                trade_val = P_t * S
+                fee = trade_val * self.commission
+                self.cash += trade_val - fee
 
-            self.H -= S
-            self.I -= cost_basis * S  # remove cost basis of sold shares
-            reward = (P_t - cost_basis) * S 
-            self.IC  += int(round(reward / P_t))
-            # self.IC += S
+                self.H -= S
+                self.I -= cost_basis * S  # remove cost basis of sold shares
+                reward = (P_t - cost_basis) * S 
+                # self.IC  += int(round(reward / P_t))
+                self.IC += S
             
 
         # -------- HOLD ------------------------------------------------- #
         elif self.H > 0:
-            reward = (P_t - cost_basis) * self.H
+            if self.I > 0:
+                reward = (P_t - cost_basis) * self.H
+            else: 
+                reward = 0
 
         # ------ advance time ------------------------------------------ #
         self.ptr += 1

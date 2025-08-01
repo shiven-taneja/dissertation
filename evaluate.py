@@ -29,7 +29,7 @@ def run_episode(env: PaperSingleStockEnv, agent: DrlUTransAgent, already_reset: 
     state = torch.from_numpy(state_nd).float()
     equity_curve = [env.portfolio_value()]
     while True:
-        act, w = agent.select_action(state)
+        act, w = agent.select_action(state, eval_mode=True)
         nxt, rew, done, _ = env.step((act, w))
         state = torch.from_numpy(nxt).float()
         equity_curve.append(env.portfolio_value())
@@ -64,6 +64,7 @@ def main(ticker, test_csv, ckpt_path, commission_rate = 0.001, investment_capaci
     )
     state_dict = torch.load(ckpt_path, map_location="cpu")["policy"]
     agent.policy_net.load_state_dict(state_dict)
+    agent.policy_net.eval()  # set to eval mode
     agent.epsilon = 0.0  # fully greedy
 
     # ------------- run episode -------------------------------

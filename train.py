@@ -32,7 +32,6 @@ def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, inv
     df = pd.read_csv(train_csv, index_col=0, parse_dates=True)
     features = df[df.columns[:-1]].to_numpy(dtype=np.float32)  # 14 features
     prices = df["close"].to_numpy(dtype=np.float32)
-
     # ------------- build environment -------------------------------
     env = PaperSingleStockEnv(
         features,

@@ -40,16 +40,19 @@ class DrlUTransAgent:
             self.device = torch.device(device)
         else:
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        # Initialize policy and target networks
-        # self.policy_net = UTransModel(window_size=self.window_size,
-        #                               feature_dim=self.feature_dim).to(self.device)
-        # self.target_net = UTransModel(window_size=self.window_size,
-        #                               feature_dim=self.feature_dim).to(self.device)
-
-        self.policy_net = UTransNet(window_size=self.window_size,
-                                      input_dim=self.feature_dim).to(self.device)
-        self.target_net = UTransNet(window_size=self.window_size,
-                                      input_dim=self.feature_dim).to(self.device)
+        
+        self.policy_net = UTransNet(
+            input_dim=self.feature_dim,
+            n_actions=3,  # Buy / Sell / Hold
+            n_transformer_heads=8,
+            n_transformer_layers=1,
+        ).to(self.device)
+        self.target_net = UTransNet(
+            input_dim=self.feature_dim,
+            n_actions=3,  # Buy / Sell / Hold
+            n_transformer_heads=8,
+            n_transformer_layers=1,
+        ).to(self.device)
         
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()

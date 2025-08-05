@@ -101,7 +101,7 @@ class PaperSingleStockEnv:
         #     self._used_once = True
         #     self.ptr = self.L  # deterministic start
 
-        self.ptr = self.L
+        self.ptr = self.L - 1
         
         # portfolio vars
         self.H = 0  # shares held
@@ -164,6 +164,7 @@ class PaperSingleStockEnv:
 
                 self.H -= S
                 self.I -= cost_basis * S  # remove cost basis of sold shares
+                cost_basis = self._cost_basis()
                 reward = (P_t - cost_basis) * S 
                 # self.IC  += int(round(reward / P_t))
                 self.IC += S

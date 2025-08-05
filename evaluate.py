@@ -78,14 +78,14 @@ def main(ticker, test_csv, ckpt_path, commission_rate = 0.001, investment_capaci
 
     # ------------- metrics -----------------------------------
     metrics = {
-        "final_return_%": (equity[-1] / equity[0] - 1) * 100,
-        "CAGR_%": cagr(equity, dates) * 100,
-        "Sharpe": sharpe(rets),
-        "MaxDD_%": max_drawdown(equity) * 100,
-        "bh_final_return_%": (bh_equity[-1] / bh_equity[0] - 1) * 100,
-        "bh_CAGR_%": cagr(bh_equity, dates) * 100,
-        "bh_Sharpe": sharpe(bh_rets),
-        "bh_MaxDD_%": max_drawdown(bh_equity) * 100,
+        "final_return_%": float((equity[-1] / equity[0] - 1) * 100),
+        "CAGR_%": float(cagr(equity, dates) * 100),
+        "Sharpe": float(sharpe(rets)),
+        "MaxDD_%": float(max_drawdown(equity) * 100),
+        "bh_final_return_%": float((bh_equity[-1] / bh_equity[0] - 1) * 100),
+        "bh_CAGR_%": float(cagr(bh_equity, dates) * 100),
+        "bh_Sharpe": float(sharpe(bh_rets)),
+        "bh_MaxDD_%": float(max_drawdown(bh_equity) * 100),
     }
     for k, v in metrics.items():
         print(f"{k:>15}: {v:8.2f}")

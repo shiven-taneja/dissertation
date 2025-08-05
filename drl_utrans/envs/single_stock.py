@@ -60,7 +60,7 @@ class PaperSingleStockEnv:
         self.rng = random.Random(seed)
 
         # pointer bounds
-        self.max_ptr = len(self.X) - 1  # last valid index  (P_t exists)
+        self.max_ptr = len(self.X) - 2  # last valid index  (P_t exists)
 
         # episode bookkeeping
         self.ptr: int
@@ -74,7 +74,8 @@ class PaperSingleStockEnv:
     # ================================================================== #
     def _state(self) -> np.ndarray:
         """Return current state window (view, not copy)."""
-        return self.X[self.ptr - self.L : self.ptr]
+        return self.X[self.ptr - self.L + 1: self.ptr +1]
+        # return self.X[self.ptr - self.L: self.ptr] 
 
     def _done(self) -> bool:
         """Episode ends when we can’t compute P_{t+1}."""
@@ -139,7 +140,6 @@ class PaperSingleStockEnv:
                 action = 2
             else:
                 B = max(100, round(((self.IC - self.H) * w) / 100) * 100)
-
                 trade_val = P_t * B
                 fee = trade_val * self.commission
                 self.cash -= trade_val + fee
@@ -158,7 +158,6 @@ class PaperSingleStockEnv:
                 cost_basis = self._cost_basis()
                 S = max(100, round((self.H * w) / 100) * 100)
                 S = min(S, self.H)
-
                 trade_val = P_t * S
                 fee = trade_val * self.commission
                 self.cash += trade_val - fee

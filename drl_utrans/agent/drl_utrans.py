@@ -17,7 +17,7 @@ class DrlUTransAgent:
     """
     def __init__(
         self,
-        state_dim: Tuple[int, int] = (12, 14),
+        state_dim: Tuple[int, int] = (12, 1),
         lr: float = 1e-3,
         batch_size: int = 20,
         gamma: float = 0.99,
@@ -35,6 +35,7 @@ class DrlUTransAgent:
         self.epsilon = epsilon_start
         self.epsilon_end = epsilon_end
         self.epsilon_decay = epsilon_decay
+        self.eps_delta = (epsilon_start - epsilon_end) / 50
         # Set device for computations
         if device:
             self.device = torch.device(device)
@@ -76,22 +77,19 @@ class DrlUTransAgent:
         state = state.to(self.device)
         # Exploration vs. exploitation
         if random.random() < self.epsilon:
-            
             action = random.randrange(3)
-            weight = random.uniform(0.1, 1.0) if action!= 2 else 0.0  # hold has no weight
+            weight = random.uniform(0.2, 1.0) if action!= 2 else 0.0  # hold has no weight
         else:
             # Exploit: choose best action from policy network
             self.policy_net.eval()
             with torch.no_grad():
                 action_logits, action_weight = self.policy_net(state.float())
-            if eval_mode:
+            if not eval_mode:
                 self.policy_net.train()
             # Select action with highest Q (logit); get weight output
             # print(f"Action logits: {action_logits}, Action weight: {action_weight}")
             action = int(torch.argmax(action_logits).item())
-            weight = float(action_weight.item())
-            if action == 2:  # if hold, weight is not used
-                weight = 0.0
+            weight = float(action_weight.item()) if action != 2 else 0.0
         return action, weight
 
     def store_transition(self, state: torch.Tensor, action: int, weight: float,
@@ -113,7 +111,9 @@ class DrlUTransAgent:
         actions = actions.to(self.device)
         rewards = rewards.to(self.device)
         dones = dones.to(self.device)
+        weights = weights.to(self.device)
         # Current Q values for taken actions
+
         q_values, _ = self.policy_net(states)
         state_action_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
         # Compute target Q values
@@ -124,6 +124,27 @@ class DrlUTransAgent:
             targets = rewards + self.gamma * max_next_q
         # Huber loss (smooth L1 loss) between current Q and target Q
         loss = nn.functional.smooth_l1_loss(state_action_values, targets)
+
+        # q_values, pred_w = self.policy_net(states)        # pred_w (B,1)
+        # state_q = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
+
+        # # target Q
+        # with torch.no_grad():
+        #     next_q, _ = self.target_net(next_states)
+        #     max_next_q = next_q.max(1).values
+        #     max_next_q[dones] = 0.0
+        #     target_q = rewards + self.gamma * max_next_q
+
+        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
+        # mask = actions != 2
+        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
+        # if mask.any():
+        #     w_loss = nn.functional.smooth_l1_loss(pred_w[mask], weights[mask])
+        #     loss   = q_loss + 0.5 * w_loss
+        # else:
+        #     loss = q_loss
+
+
         # Optimize the policy network
         self.optimizer.zero_grad()
         loss.backward()
@@ -137,7 +158,10 @@ class DrlUTransAgent:
 
     def decay_epsilon(self):
         """Decay exploration rate after each episode."""
-        self.epsilon = max(self.epsilon_end, self.epsilon * self.epsilon_decay)
+        # self.epsilon = max(self.epsilon_end, self.epsilon * self.epsilon_decay)
+        # self.epsilon = max(self.epsilon_end,
+        #            self.epsilon - (1-self.epsilon_end))
+        self.epsilon = max(self.epsilon_end, self.epsilon - self.eps_delta)
 
     def train(self, env, num_episodes: int = 50, max_steps: Optional[int] = None):
         """

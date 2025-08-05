@@ -1,6 +1,6 @@
 model:
   window_size: 12
-  feature_dim: 14     # do not change unless indicators file changes
+  feature_dim: 1     # do not change unless indicators file changes
 
 agent:
   learning_rate: 0.001

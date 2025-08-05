@@ -171,11 +171,17 @@ class PaperSingleStockEnv:
             
 
         # -------- HOLD ------------------------------------------------- #
-        elif self.H > 0:
+        # elif self.H > 0:
+        #     if self.I > 0:
+        #         reward = (P_t - cost_basis) * self.H
+        #     else: 
+        #         reward = 0
+
+        elif action == 2:  # hold
+            reward = 0
             if self.I > 0:
+                cost_basis = self._cost_basis()
                 reward = (P_t - cost_basis) * self.H
-            else: 
-                reward = 0
 
         # ------ advance time ------------------------------------------ #
         self.ptr += 1

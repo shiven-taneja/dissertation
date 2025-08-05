@@ -15,7 +15,7 @@ from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
 # ─────────────────────────────── main ────────────────────────────────
-def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 42):
+def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 26):
     cfg = load_cfg(Path("drl_utrans/configs/defaults.yaml"))
     seed = seed
     # ------------- deterministic behaviour (optional) --------------

@@ -6,14 +6,16 @@ class _NormLinearReLU(nn.Module):
     """Red arrow in the figure:  LayerNorm ➜ Linear ➜ ReLU."""
     def __init__(self, in_dim: int, out_dim: int):
         super().__init__()
-        self.bn   = nn.BatchNorm1d(in_dim, affine=True)
+        # self.bn   = nn.BatchNorm1d(in_dim, affine=True)
+        self.ln = nn.LayerNorm(in_dim, elementwise_affine=True)
         self.fc   = nn.Linear(in_dim, out_dim)
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: (batch, seq_len, in_dim)
         # return self.block(x)
-        x = self.bn(x.transpose(1,2)).transpose(1,2)  # (B,T,F) -> BN -> (B,T,F)
+        # x = self.bn(x.transpose(1,2)).transpose(1,2)  # (B,T,F) -> BN -> (B,T,F)
+        x = self.ln(x)  # (B, T, F)
         return self.relu(self.fc(x))
 
 

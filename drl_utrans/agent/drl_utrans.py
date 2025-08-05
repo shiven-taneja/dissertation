@@ -114,35 +114,35 @@ class DrlUTransAgent:
         weights = weights.to(self.device)
         # Current Q values for taken actions
 
-        q_values, _ = self.policy_net(states)
-        state_action_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
-        # Compute target Q values
-        with torch.no_grad():
-            q_next, _ = self.target_net(next_states)
-            max_next_q = q_next.max(dim=1).values  # max Q across actions for next state
-            max_next_q[dones] = 0.0                # no future value if done
-            targets = rewards + self.gamma * max_next_q
-        # Huber loss (smooth L1 loss) between current Q and target Q
-        loss = nn.functional.smooth_l1_loss(state_action_values, targets)
-
-        # q_values, pred_w = self.policy_net(states)        # pred_w (B,1)
-        # state_q = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
-
-        # # target Q
+        # q_values, _ = self.policy_net(states)
+        # state_action_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
+        # # Compute target Q values
         # with torch.no_grad():
-        #     next_q, _ = self.target_net(next_states)
-        #     max_next_q = next_q.max(1).values
-        #     max_next_q[dones] = 0.0
-        #     target_q = rewards + self.gamma * max_next_q
+        #     q_next, _ = self.target_net(next_states)
+        #     max_next_q = q_next.max(dim=1).values  # max Q across actions for next state
+        #     max_next_q[dones] = 0.0                # no future value if done
+        #     targets = rewards + self.gamma * max_next_q
+        # # Huber loss (smooth L1 loss) between current Q and target Q
+        # loss = nn.functional.smooth_l1_loss(state_action_values, targets)
 
-        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
-        # mask = actions != 2
-        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
-        # if mask.any():
-        #     w_loss = nn.functional.smooth_l1_loss(pred_w[mask], weights[mask])
-        #     loss   = q_loss + 0.5 * w_loss
-        # else:
-        #     loss = q_loss
+        q_values, pred_w = self.policy_net(states)        # pred_w (B,1)
+        state_q = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
+
+        # target Q
+        with torch.no_grad():
+            next_q, _ = self.target_net(next_states)
+            max_next_q = next_q.max(1).values
+            max_next_q[dones] = 0.0
+            target_q = rewards + self.gamma * max_next_q
+
+        q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
+        mask = actions != 2
+        q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
+        if mask.any():
+            w_loss = nn.functional.smooth_l1_loss(pred_w[mask], weights[mask])
+            loss   = q_loss + 0.5 * w_loss
+        else:
+            loss = q_loss
 
 
         # Optimize the policy network

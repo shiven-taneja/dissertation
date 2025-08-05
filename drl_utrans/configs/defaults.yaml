@@ -9,6 +9,6 @@ agent:
   epochs: 50
   gamma: 0.99
   target_update_freq: 200
-  epsilon_start: 1.0
+  epsilon_start: 0.2
   epsilon_end: 0.05
   epsilon_decay: 0.99

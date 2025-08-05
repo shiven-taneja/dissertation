@@ -50,9 +50,9 @@ def main(ticker: str, start: str, end: str, split_date: str):
     train = merged.loc[: split_date]
     test  = merged.loc[split_date :]
 
-    mu = train["delta_oc"].mean()
-    sigma = train["delta_oc"].std(ddof=0)
-    merged["delta_oc"] = (merged["delta_oc"] - mu) / sigma
+    # mu = train["delta_oc"].mean()
+    # sigma = train["delta_oc"].std(ddof=0)
+    # merged["delta_oc"] = (merged["delta_oc"] - mu) / sigma
 
     outdir = Path("data"); outdir.mkdir(exist_ok=True)
     train.to_csv(outdir / f"{ticker}_train.csv")

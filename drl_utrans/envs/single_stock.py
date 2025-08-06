@@ -166,8 +166,8 @@ class PaperSingleStockEnv:
                 self.I -= cost_basis * S  # remove cost basis of sold shares
                 cost_basis = self._cost_basis()
                 reward = (P_t - cost_basis) * S 
-                # self.IC  += int(round(reward / P_t))
-                self.IC += S
+                self.IC  += int(round(reward / P_t))
+                # self.IC += S
             
 
         # -------- HOLD ------------------------------------------------- #

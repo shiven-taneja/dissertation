@@ -64,9 +64,9 @@ class DrlUTransAgent:
         # Counter for training steps (for target network updates)
         self.train_steps = 0
         # Compile model for performance (PyTorch 2.x)
-        # if hasattr(torch, 'compile'):
-        #     self.policy_net = torch.compile(self.policy_net)
-        #     self.target_net = torch.compile(self.target_net)
+        if hasattr(torch, 'compile'):
+            self.policy_net = torch.compile(self.policy_net)
+            self.target_net = torch.compile(self.target_net)
 
     def select_action(self, state: torch.Tensor, eval_mode = False) -> Tuple[int, float]:
         """
@@ -143,7 +143,7 @@ class DrlUTransAgent:
         #     w_loss = nn.functional.smooth_l1_loss(pred_w[mask], weights[mask])
         #     loss   = q_loss + 0.5 * w_loss
         # else:
-        #     loss = q_loss
+            # loss = q_loss
 
 
         # Optimize the policy network

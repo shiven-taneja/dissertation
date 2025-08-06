@@ -10,22 +10,10 @@ import torch
 
 class PaperSingleStockEnv:
     """
-    Single-stock trading environment that *exactly* follows
-    Algorithm 1 (reward) from Yang et al. 2023, with these extras:
-
-    • `train_mode=True`  → each reset() picks a random start index
-      so episodes cover diverse sub-segments of the training set.
-    • `train_mode=False` → deterministic test episode that runs once
-      from the first index to the very end.
-
-    • Commission fee (`commission`) deducted on every trade
-      (buy + sell) just like FinRL.
-
-    State returned by reset/step is a **NumPy (window, feature) float32**.
-    Helper `.to_tensor()` gives you a ready PyTorch float tensor.
+    Fixed single-stock trading environment with proper state handling
+    and action execution.
     """
 
-    # ------------------------------------------------------------------ #
     def __init__(
         self,
         features: np.ndarray | pd.DataFrame,
@@ -36,7 +24,7 @@ class PaperSingleStockEnv:
         train_mode: bool = True,
         seed: Optional[int] = None,
     ):
-        # -------- store market data ----------------------------------- #
+        # Store market data
         if isinstance(features, pd.DataFrame):
             features = features.to_numpy()
         elif not isinstance(features, np.ndarray):
@@ -47,161 +35,175 @@ class PaperSingleStockEnv:
             prices = prices.to_numpy()
         self.P = prices.astype(np.float32)
 
-        assert len(self.X) == len(
-            self.P
-        ), "features and price length mismatch!"
+        assert len(self.X) == len(self.P), "features and price length mismatch!"
 
-        # -------- static hyper-params --------------------------------- #
+        # Static hyper-params
         self.L = window_size
         self.ic0 = ic_shares
-        self.cash0 = None 
         self.commission = commission
         self.train_mode = train_mode
         self.rng = random.Random(seed)
 
-        # pointer bounds
-        self.max_ptr = len(self.X) - 2  # last valid index  (P_t exists)
-
-        # episode bookkeeping
-        self.ptr: int
-        self.H: int
-        self.I: float
-        self.IC: int
+        # Pointer bounds - fixed to prevent looking ahead
+        self.max_ptr = len(self.X) - 1  # last valid index
+        
+        # Episode bookkeeping
         self.reset()
 
-    # ================================================================== #
-    # internal helpers
-    # ================================================================== #
     def _state(self) -> np.ndarray:
-        """Return current state window (view, not copy)."""
-        return self.X[self.ptr - self.L + 1: self.ptr +1]
-        # return self.X[self.ptr - self.L: self.ptr] 
+        """Return current state window (historical data only)."""
+        # FIXED: Return window ending at current ptr (not including future)
+        start_idx = max(0, self.ptr - self.L + 1)
+        end_idx = self.ptr + 1
+        state = self.X[start_idx:end_idx]
+        
+        # Pad with zeros if at the beginning
+        if state.shape[0] < self.L:
+            padding = np.zeros((self.L - state.shape[0], state.shape[1]), dtype=np.float32)
+            state = np.concatenate([padding, state], axis=0)
+        
+        return state
 
     def _done(self) -> bool:
-        """Episode ends when we can’t compute P_{t+1}."""
-        return self.ptr >= self.max_ptr
+        """Episode ends when we reach the end of data."""
+        return self.ptr >= self.max_ptr - 1
 
     def _cost_basis(self) -> float:
         return self.I / self.H if self.H > 0 else 0.0
 
-    # ================================================================== #
-    # gym-like API
-    # ================================================================== #
     def reset(self) -> np.ndarray:
-        """
-        Returns first state window.
-        In train_mode we pick a random start index so that
-        window & at least one step fit inside data.
-        """
-        # if self.train_mode:
-        #     self.ptr = self.rng.randint(self.L, self.max_ptr - 1)
-        # else:  # test mode
-        #     if hasattr(self, "_used_once"):
-        #         raise RuntimeError("Test env can be run only once.")
-        #     self._used_once = True
-        #     self.ptr = self.L  # deterministic start
-
-        self.ptr = self.L - 1
+        """Reset environment to initial state."""
+        if self.train_mode:
+            # Random start for training (ensure we have enough data)
+            min_start = self.L - 1
+            max_start = max(min_start, self.max_ptr - 100)  # Ensure at least 100 steps
+            self.ptr = self.rng.randint(min_start, max_start)
+        else:
+            # Fixed start for evaluation
+            self.ptr = self.L - 1
         
-        # portfolio vars
-        self.H = 0  # shares held
-        self.I = 0.0  # invested amount $
-        self.IC = self.ic0  # remaining capacity (shares)
-
+        # Portfolio variables
+        self.H = 0      # shares held
+        self.I = 0.0    # invested amount
+        self.IC = self.ic0  # investment capacity
+        
+        # Initialize cash
         P0 = self.P[self.ptr]
         self.cash0 = P0 * self.ic0
-        self.cash  = self.cash0
-
+        self.cash = self.cash0
+        
         return self._state()
 
-    # ------------------------------------------------------------------ #
     def step(self, act_weight: Tuple[int, float]):
         """
-        Parameters
-        ----------
-        act_weight : (action_id, weight)
-            action_id : 0 buy, 1 sell, 2 hold
-            weight    : ∈[0,1] ignored for hold
-        Returns
-        -------
-        next_state : np.ndarray  (window, feat) float32
-        reward     : float
-        done       : bool
-        info       : dict   (current portfolio value)
+        Execute action and return next state.
+        
+        Actions:
+        - 0: Buy
+        - 1: Sell  
+        - 2: Hold
         """
         action, w = act_weight
+        
+        # Ensure weight is valid
+        w = np.clip(w, 0.0, 1.0)
+        
+        # Get current price
         P_t = self.P[self.ptr]
-        cost_basis = self._cost_basis()
         reward = 0.0
-
-        # -------- BUY -------------------------------------------------- #
+        
+        # Debug info
+        old_H = self.H
+        old_cash = self.cash
+        
+        # === BUY ACTION ===
         if action == 0:
-            if self.IC - self.H <= 100:
-                action = 2
-            else:
-                B = max(100, round(((self.IC - self.H) * w) / 100) * 100)
+            max_can_buy = int(self.cash / (P_t * (1 + self.commission)))
+            max_allowed = self.IC - self.H
+            max_shares = min(max_can_buy, max_allowed)
+            
+            if max_shares >= 100:
+                # Calculate shares to buy based on weight
+                B = int(w * max_shares / 100) * 100
+                B = max(100, min(B, max_shares))
+                
+                # Execute buy
                 trade_val = P_t * B
                 fee = trade_val * self.commission
-                self.cash -= trade_val + fee
-
-                self.H += B
-                self.I += trade_val  
-                cost_basis = self._cost_basis()
-                reward = (cost_basis - P_t) * B 
-                self.IC -= B
-
-        # -------- SELL ------------------------------------------------- #
-        elif action == 1:
-            if self.H <= 0: # no shares to sell
-                action = 2
+                total_cost = trade_val + fee
+                
+                if self.cash >= total_cost:
+                    self.cash -= total_cost
+                    self.H += B
+                    self.I += trade_val
+                    
+                    # Calculate reward (paper formula)
+                    cost_basis = self._cost_basis()
+                    reward = (cost_basis - P_t) * B
+                    action_taken = 0
+                else:
+                    action_taken = 2  # Can't afford, hold instead
             else:
+                action_taken = 2  # Not enough capacity, hold
+                
+        # === SELL ACTION ===
+        elif action == 1:
+            if self.H >= 100:
+                # Calculate shares to sell based on weight
+                S = int(w * self.H / 100) * 100
+                S = max(100, min(S, self.H))
+                
+                # Execute sell
                 cost_basis = self._cost_basis()
-                S = max(100, round((self.H * w) / 100) * 100)
-                S = min(S, self.H)
                 trade_val = P_t * S
                 fee = trade_val * self.commission
+                
                 self.cash += trade_val - fee
-
                 self.H -= S
-                self.I -= cost_basis * S  # remove cost basis of sold shares
-                cost_basis = self._cost_basis()
-                reward = (P_t - cost_basis) * S 
-                self.IC  += int(round(reward / P_t))
-                # self.IC += S
-            
-
-        # -------- HOLD ------------------------------------------------- #
-        # elif self.H > 0:
-        #     if self.I > 0:
-        #         reward = (P_t - cost_basis) * self.H
-        #     else: 
-        #         reward = 0
-
-        elif action == 2:  # hold
-            reward = 0
-            if self.I > 0:
+                self.I = max(0, self.I - cost_basis * S)
+                
+                # Calculate reward (paper formula)
+                reward = (P_t - cost_basis) * S
+                
+                # Update IC based on profit
+                if reward > 0:
+                    self.IC += int(reward / P_t)
+                    
+                action_taken = 1
+            else:
+                action_taken = 2  # No shares to sell, hold
+                
+        # === HOLD ACTION ===
+        else:
+            action_taken = 2
+            if self.H > 0:
                 cost_basis = self._cost_basis()
                 reward = (P_t - cost_basis) * self.H
 
-        # ------ advance time ------------------------------------------ #
+        # Advance time
         self.ptr += 1
         done = self._done()
-        next_state = (
-            self._state() if not done else np.zeros_like(self._state())
-        )
-        info = {"portfolio_value": self.portfolio_value(),
-        "action": action, "weight": w, "shares": self.H}
+        
+        # Get next state
+        if not done:
+            next_state = self._state()
+        else:
+            next_state = np.zeros_like(self._state())
+        
+        # Prepare info dict
+        info = {
+            "portfolio_value": self.portfolio_value(),
+            "action": action_taken,
+            "weight": w,
+            "shares": self.H,
+            "cash": self.cash,
+            "price": P_t
+        }
+        
         return next_state.astype(np.float32), reward, done, info
 
-    # ================================================================== #
-    # convenience
-    # ================================================================== #
     def portfolio_value(self, P_t: Optional[float] = None) -> float:
-        """cash value of held shares + cost basis remainder (IC not modelled)."""
+        """Calculate total portfolio value."""
         if P_t is None:
-            P_t = self.P[self.ptr]
+            P_t = self.P[min(self.ptr, len(self.P) - 1)]
         return self.cash + self.H * P_t
-
-    # quick torch helper
-    def to_tensor(self, state: np.ndarray) -> torch.Tensor:
-        return torch.from_numpy(state).float()

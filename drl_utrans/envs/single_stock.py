@@ -126,7 +126,7 @@ class PaperSingleStockEnv:
             
             if max_shares >= 100:
                 # Calculate shares to buy based on weight
-                B = int(w * max_shares / 100) * 100
+                B = int(round(w * max_shares / 100)) * 100
                 B = max(100, min(B, max_shares))
                 
                 # Execute buy
@@ -152,7 +152,7 @@ class PaperSingleStockEnv:
         elif action == 1:
             if self.H >= 100:
                 # Calculate shares to sell based on weight
-                S = int(w * self.H / 100) * 100
+                S = int(round(w * self.H / 100)) * 100
                 S = max(100, min(S, self.H))
                 
                 # Execute sell

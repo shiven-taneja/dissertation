@@ -15,8 +15,7 @@ from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
 # ─────────────────────────────── main ────────────────────────────────
-def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 26):
-    cfg = load_cfg(Path("drl_utrans/configs/defaults.yaml"))
+def main(ticker, train_csv, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 26, window_size = 12, feature_dim = 14, lr = 0.001, batch_size = 20, gamma = 0.9, replay_memory_size = 10000, target_update_freq = 500, epsilon_start = 1.0, epsilon_end = 0.4, epsilon_decay = 0.99, output = True):
     seed = seed
     # ------------- deterministic behaviour (optional) --------------
     if seed is not None:
@@ -36,7 +35,7 @@ def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, inv
     env = PaperSingleStockEnv(
         features,
         prices,
-        window_size=cfg["model"]["window_size"],
+        window_size=window_size,
         ic_shares=investment_capacity,
         commission=commission_rate,
         train_mode=True,
@@ -45,15 +44,15 @@ def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, inv
 
     # ------------- build agent -------------------------------------
     agent = DrlUTransAgent(
-        state_dim=(cfg["model"]["window_size"], cfg["model"]["feature_dim"]),
-        lr=cfg["agent"]["learning_rate"],
-        batch_size=cfg["agent"]["batch_size"],
-        gamma=cfg["agent"]["gamma"],
-        memory_size=cfg["agent"]["replay_memory_size"],
-        target_update_freq=cfg["agent"]["target_update_freq"],
-        epsilon_start=cfg["agent"]["epsilon_start"],
-        epsilon_end=cfg["agent"]["epsilon_end"],
-        epsilon_decay=cfg["agent"]["epsilon_decay"],
+        state_dim=(window_size, feature_dim),
+        lr=lr,
+        batch_size=batch_size,
+        gamma=gamma,
+        memory_size=replay_memory_size,
+        target_update_freq=target_update_freq,
+        epsilon_start=epsilon_start,
+        epsilon_end=epsilon_end,
+        epsilon_decay=epsilon_decay,
     )
 
     # ------------- logging -----------------------------------------
@@ -66,7 +65,8 @@ def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, inv
     global_step = 0
     start_wall = perf_counter()
     for ep in range(epochs):
-        print(f"Starting epoch {ep + 1}/{epochs} ...", flush=True)
+        if output:
+            print(f"Starting epoch {ep + 1}/{epochs} ...", flush=True)
         state_nd = env.reset()
         state = torch.from_numpy(state_nd).float()
         ep_reward = 0.0
@@ -105,16 +105,17 @@ def main(ticker, start, end, train_csv, split_date, commission_rate = 0.001, inv
         buys  = sum(1 for a in actions_log if a == 0)
         sells = sum(1 for a in actions_log if a == 1)
         avg_w = np.mean(weights_log) if weights_log else 0.0
-        print(
-            f"Ep {ep+1:03d}/{epochs}  "
-            f"reward {ep_reward:8.1f}  "
-            f"ε {agent.epsilon:4.2f}  "
-            f"steps {global_step:5d}  "
-            f"time {elapsed/60:4.1f}m"
-            f"  buys {buys:4d}  sells {sells:4d} "
-            f"avg_w {avg_w:6.2f}",
-            flush=True,
-        )
+        if output:
+            print(
+                f"Ep {ep+1:03d}/{epochs}  "
+                f"reward {ep_reward:8.1f}  "
+                f"ε {agent.epsilon:4.2f}  "
+                f"steps {global_step:5d}  "
+                f"time {elapsed/60:4.1f}m"
+                f"  buys {buys:4d}  sells {sells:4d} "
+                f"avg_w {avg_w:6.2f}",
+                flush=True,
+            )
         agent.decay_epsilon()
 
     # ------------- save checkpoint ---------------------------------

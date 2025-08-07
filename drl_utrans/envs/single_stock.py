@@ -73,14 +73,16 @@ class PaperSingleStockEnv:
 
     def reset(self) -> np.ndarray:
         """Reset environment to initial state."""
-        if self.train_mode:
-            # Random start for training (ensure we have enough data)
-            min_start = self.L - 1
-            max_start = max(min_start, self.max_ptr - 100)  # Ensure at least 100 steps
-            self.ptr = self.rng.randint(min_start, max_start)
-        else:
-            # Fixed start for evaluation
-            self.ptr = self.L - 1
+        # if self.train_mode:
+        #     # Random start for training (ensure we have enough data)
+        #     min_start = self.L - 1
+        #     max_start = max(min_start, self.max_ptr - 100)  # Ensure at least 100 steps
+        #     self.ptr = self.rng.randint(min_start, max_start)
+        # else:
+        #     # Fixed start for evaluation
+        #     self.ptr = self.L - 1
+
+        self.ptr = self.L - 1
         
         # Portfolio variables
         self.H = 0      # shares held

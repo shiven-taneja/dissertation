@@ -7,8 +7,8 @@ agent:
   batch_size: 20
   replay_memory_size: 10000
   epochs: 50
-  gamma: 0.99
-  target_update_freq: 200
-  epsilon_start: 0.5
-  epsilon_end: 0.05
-  epsilon_decay: 0.99
+  gamma: 0.9
+  target_update_freq: 500
+  epsilon_start: 1.0
+  epsilon_end: 0.4
+  # epsilon_decay: 0.99

@@ -36,6 +36,7 @@ class DrlUTransAgent:
         self.epsilon_end = epsilon_end
         self.epsilon_decay = epsilon_decay
         self.eps_delta = (epsilon_start - epsilon_end) / 50
+        self.weight_loss_coef = 0.5 
         # Set device for computations
         if device:
             self.device = torch.device(device)
@@ -68,29 +69,31 @@ class DrlUTransAgent:
             self.policy_net = torch.compile(self.policy_net)
             self.target_net = torch.compile(self.target_net)
 
-    def select_action(self, state: torch.Tensor, eval_mode = False) -> Tuple[int, float]:
-        """
-        Choose an action (0=buy, 1=sell, 2=hold) and an action weight  using epsilon-greedy.
-        """
+    def select_action(self, state: torch.Tensor, eval_mode=False) -> Tuple[int, float]:
+        """Choose an action and weight using epsilon-greedy."""
         if state.dim() == 2:
-            state = state.unsqueeze(0)  # add batch dimension
+            state = state.unsqueeze(0)
         state = state.to(self.device)
-        # Exploration vs. exploitation
-        if random.random() < self.epsilon:
+        
+        # During training, use epsilon-greedy
+        if not eval_mode and random.random() < self.epsilon:
             action = random.randrange(3)
-            # weight = random.uniform(0.2, 1.0) if action!= 2 else 0.0  # hold has no weight
+            # Use random weights during exploration for better learning
+            # weight = random.uniform(0.1, 1.0) if action != 2 else 0.0
             weight = 0.1 if action != 2 else 0.0
         else:
-            # Exploit: choose best action from policy network
+            # Exploit: use network predictions
             self.policy_net.eval()
             with torch.no_grad():
                 action_logits, action_weight = self.policy_net(state.float())
             if not eval_mode:
                 self.policy_net.train()
-            # Select action with highest Q (logit); get weight output
-            # print(f"Action logits: {action_logits}, Action weight: {action_weight}")
+            
             action = int(torch.argmax(action_logits).item())
-            weight = float(action_weight.item()) if action != 2 else 0.0
+            # Use the network's weight prediction directly
+            weight = float(torch.clamp(action_weight, 0.0, 1.0).item())
+            weight = weight if action != 2 else 0.0
+        
         return action, weight
 
     def store_transition(self, state: torch.Tensor, action: int, weight: float,
@@ -99,13 +102,11 @@ class DrlUTransAgent:
         self.memory.push(state, action, weight, reward, next_state, done)
 
     def train_step(self) -> Optional[float]:
-        """
-        Sample a batch from memory and perform one training step.
-        Returns the loss value (Huber loss) or None if not enough data.
-        """
+        """Sample batch and train with both Q-loss and weight loss."""
         if len(self.memory) < self.batch_size:
-            return None  # not enough samples to train
-        # Sample batch of transitions
+            return None
+        
+        # Sample batch
         states, actions, weights, rewards, next_states, dones = self.memory.sample(self.batch_size)
         states = states.to(self.device).float()
         next_states = next_states.to(self.device).float()
@@ -113,56 +114,50 @@ class DrlUTransAgent:
         rewards = rewards.to(self.device)
         dones = dones.to(self.device)
         weights = weights.to(self.device)
-        # Current Q values for taken actions
-
-        q_values, _ = self.policy_net(states)
+        
+        # Get Q-values and weight predictions
+        q_values, pred_weights = self.policy_net(states)
         state_action_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
-        # Compute target Q values
+        
+        # Compute target Q-values
         with torch.no_grad():
-            q_next, _ = self.target_net(next_states)
-            max_next_q = q_next.max(dim=1).values  # max Q across actions for next state
-            max_next_q[dones] = 0.0                # no future value if done
+            next_q, _ = self.target_net(next_states)
+            max_next_q = next_q.max(dim=1).values
+            max_next_q[dones] = 0.0
             targets = rewards + self.gamma * max_next_q
-        # Huber loss (smooth L1 loss) between current Q and target Q
-        loss = nn.functional.smooth_l1_loss(state_action_values, targets)
-
-        # q_values, pred_w = self.policy_net(states)        # pred_w (B,1)
-        # state_q = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
-
-        # # target Q
-        # with torch.no_grad():
-        #     next_q, _ = self.target_net(next_states)
-        #     max_next_q = next_q.max(1).values
-        #     max_next_q[dones] = 0.0
-        #     target_q = rewards + self.gamma * max_next_q
-
-        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
-        # mask = actions != 2
-        # q_loss = nn.functional.smooth_l1_loss(state_q, target_q)
-        # if mask.any():
-        #     w_loss = nn.functional.smooth_l1_loss(pred_w[mask], weights[mask])
-        #     loss   = q_loss + 0.5 * w_loss
-        # else:
-            # loss = q_loss
-
-
-        # Optimize the policy network
+        
+        # Q-value loss
+        q_loss = nn.functional.smooth_l1_loss(state_action_values, targets)
+        
+        # Weight prediction loss (only for buy/sell actions)
+        action_mask = (actions != 2)  # Not hold
+        if action_mask.any():
+            pred_weights_masked = pred_weights.squeeze(-1)[action_mask]
+            target_weights = weights[action_mask]
+            weight_loss = nn.functional.mse_loss(pred_weights_masked, target_weights)
+            total_loss = q_loss + self.weight_loss_coef * weight_loss
+        else:
+            total_loss = q_loss
+        
+        # Optimize
         self.optimizer.zero_grad()
-        loss.backward()
-        nn.utils.clip_grad_norm_(self.policy_net.parameters(), max_norm=10.0)  # gradient clipping (optional)
+        total_loss.backward()
+        nn.utils.clip_grad_norm_(self.policy_net.parameters(), max_norm=1.0)
         self.optimizer.step()
-        # Update target network periodically
+        
+        # Update target network
         self.train_steps += 1
         if self.train_steps % self.target_update_freq == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
-        return float(loss.item())
+        
+        return float(total_loss.item())
 
     def decay_epsilon(self):
         """Decay exploration rate after each episode."""
-        self.epsilon = max(self.epsilon_end, self.epsilon * self.epsilon_decay)
+        # self.epsilon = max(self.epsilon_end, self.epsilon * self.epsilon_decay)
         # self.epsilon = max(self.epsilon_end,
         #            self.epsilon - (1-self.epsilon_end))
-        # self.epsilon = max(self.epsilon_end, self.epsilon - self.eps_delta)
+        self.epsilon = max(self.epsilon_end, self.epsilon - self.eps_delta)
 
     def train(self, env, num_episodes: int = 50, max_steps: Optional[int] = None):
         """

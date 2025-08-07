@@ -15,7 +15,7 @@ from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
 
 # ─────────────────────────────── main ────────────────────────────────
-def main(ticker, train_csv, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 26, window_size = 12, feature_dim = 14, lr = 0.001, batch_size = 20, gamma = 0.9, replay_memory_size = 10000, target_update_freq = 500, epsilon_start = 1.0, epsilon_end = 0.4, epsilon_decay = 0.99, output = True):
+def main(ticker, train_csv, commission_rate = 0.001, investment_capacity = 500, epochs = 50, seed = 26, window_size = 12, feature_dim = 14, lr = 0.001, batch_size = 20, gamma = 0.9, replay_memory_size = 10000, target_update_freq = 500, epsilon_start = 1.0, epsilon_end = 0.4, epsilon_decay = 0.99, weight_loss_coef = 0.5, rand_weights = True, output = True):
     seed = seed
     # ------------- deterministic behaviour (optional) --------------
     if seed is not None:
@@ -53,6 +53,8 @@ def main(ticker, train_csv, commission_rate = 0.001, investment_capacity = 500, 
         epsilon_start=epsilon_start,
         epsilon_end=epsilon_end,
         epsilon_decay=epsilon_decay,
+        weight_loss_coef=weight_loss_coef,
+        rand_weights=rand_weights,
     )
 
     # ------------- logging -----------------------------------------

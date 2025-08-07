@@ -26,6 +26,8 @@ class DrlUTransAgent:
         epsilon_start: float = 1.0,
         epsilon_end: float = 0.1,
         epsilon_decay: float = 0.95,
+        weight_loss_coef: float = 0.5, 
+        rand_weights: bool = True,
         device: Optional[str] = None,
     ):
         self.window_size, self.feature_dim = state_dim
@@ -36,7 +38,7 @@ class DrlUTransAgent:
         self.epsilon_end = epsilon_end
         self.epsilon_decay = epsilon_decay
         self.eps_delta = (epsilon_start - epsilon_end) / 50
-        self.weight_loss_coef = 0.5 
+        self.weight_loss_coef = weight_loss_coef
         # Set device for computations
         if device:
             self.device = torch.device(device)
@@ -68,6 +70,7 @@ class DrlUTransAgent:
         if hasattr(torch, 'compile'):
             self.policy_net = torch.compile(self.policy_net)
             self.target_net = torch.compile(self.target_net)
+        self.rand_weights = rand_weights
 
     def select_action(self, state: torch.Tensor, eval_mode=False) -> Tuple[int, float]:
         """Choose an action and weight using epsilon-greedy."""
@@ -79,8 +82,10 @@ class DrlUTransAgent:
         if not eval_mode and random.random() < self.epsilon:
             action = random.randrange(3)
             # Use random weights during exploration for better learning
-            # weight = random.uniform(0.1, 1.0) if action != 2 else 0.0
-            weight = 0.1 if action != 2 else 0.0
+            if self.rand_weights: 
+                weight = random.uniform(0.1, 1.0) if action != 2 else 0.0
+            else:
+                weight = 0.1 if action != 2 else 0.0
         else:
             # Exploit: use network predictions
             self.policy_net.eval()

@@ -79,8 +79,7 @@ def run_episode(env: PaperSingleStockEnv, agent: DrlUTransAgent, debug=True):
     return np.asarray(equity_curve), actions_taken, weights_used
 
 
-def main(ticker, test_csv, ckpt_path, commission_rate=0.001, investment_capacity=500):
-    cfg = load_cfg(Path("drl_utrans/configs/defaults.yaml"))
+def main(ticker, test_csv, ckpt_path, commission_rate=0.001, investment_capacity=500, window_size=12, feature_dim=14):
     
     # Load test data
     test_csv = Path(test_csv)
@@ -97,7 +96,7 @@ def main(ticker, test_csv, ckpt_path, commission_rate=0.001, investment_capacity
     env = PaperSingleStockEnv(
         feats,
         prices,
-        window_size=cfg["model"]["window_size"],
+        window_size=window_size,
         ic_shares=investment_capacity,
         commission=commission_rate,
         train_mode=False,
@@ -105,7 +104,7 @@ def main(ticker, test_csv, ckpt_path, commission_rate=0.001, investment_capacity
     
     # Load agent
     agent = DrlUTransAgent(
-        state_dim=(cfg["model"]["window_size"], cfg["model"]["feature_dim"])
+        state_dim=(window_size, feature_dim)
     )
     
     # Load checkpoint

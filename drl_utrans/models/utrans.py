@@ -92,8 +92,8 @@ class UTransNet(nn.Module):
         final = d2 + e1           # last skip (no further reduction)
 
         # Heads ---------------------------------------------------------------
-        pooled = final.mean(dim=1)        # global average over sequence
-        # pooled = final[:, -1, :]  # take the last time step (as in the paper)
+        # pooled = final.mean(dim=1)        # global average over sequence
+        pooled = final[:, -1, :]  # take the last time step (as in the paper)
         # pooled = final.squeeze(1)  # (batch, 64)
         q_values   = self.act_head(pooled)
         act_weight = self.weight_head(pooled).squeeze(-1)

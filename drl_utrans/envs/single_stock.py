@@ -168,9 +168,9 @@ class PaperSingleStockEnv:
                 reward = (P_t - cost_basis) * S
                 
                 # Update IC based on profit
-                if reward > 0:
-                    self.IC += int(reward / P_t)
-                    
+                # if reward > 0:
+                #     self.IC += int(reward / P_t)
+                self.IC += int(reward / P_t)
                 action_taken = 1
             else:
                 action_taken = 2  # No shares to sell, hold

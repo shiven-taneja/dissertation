@@ -24,7 +24,7 @@ from feature_generation.headline_features import main as enrich_headlines
 import numpy as np
 
 
-# # ─────────────────────────────── helpers ──────────────────────────────
+# # # ─────────────────────────────── helpers ──────────────────────────────
 # def build_feature(df: pd.DataFrame) -> pd.Series:
 #     delta = (df["Open"] - df["Close"]).astype(np.float32)
 #     delta = delta.rename(columns = {"AAPL": "delta_oc"})
@@ -32,7 +32,7 @@ import numpy as np
 
 
 
-# # ───────────────────────────────  main  ───────────────────────────────
+# # # ───────────────────────────────  main  ───────────────────────────────
 # def main(ticker: str, start: str, end: str, split_date: str):
 #     print(f"Downloading {ticker}  [{start} → {end}] …", flush=True)
 #     df = yf.download(ticker, start=start, end=end, auto_adjust=True)
@@ -50,9 +50,12 @@ import numpy as np
 #     train = merged.loc[: split_date]
 #     test  = merged.loc[split_date :]
 
-#     # mu = train["delta_oc"].mean()
-#     # sigma = train["delta_oc"].std(ddof=0)
-#     # merged["delta_oc"] = (merged["delta_oc"] - mu) / sigma
+#     mu = train["delta_oc"].mean()
+#     sigma = train["delta_oc"].std(ddof=0)
+#     merged["delta_oc"] = (merged["delta_oc"] - mu) / sigma
+
+#     train = merged.loc[: split_date]
+#     test  = merged.loc[split_date :]
 
 #     outdir = Path("data"); outdir.mkdir(exist_ok=True)
 #     train.to_csv(outdir / f"{ticker}_train.csv")

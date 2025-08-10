@@ -18,8 +18,6 @@ from drl_utrans.utils.cfg import load_cfg
 
 from drl_utrans.utils.indicators import make_feature_matrix, FEATURE_COLS
 
-from feature_generation.headline_features import main as enrich_headlines
-
 def main(ticker, start, end, split_date):
     print(f"Downloading {ticker} [{start} → {end}] …")
     df = yf.download(ticker, start=start, end=end, auto_adjust=True)

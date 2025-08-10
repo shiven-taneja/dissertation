@@ -1,38 +1,97 @@
-# scripts/train_ppo.py
 from __future__ import annotations
+
 from pathlib import Path
 from statistics import mean
 from time import perf_counter
+from datetime import datetime
+from typing import Dict, List, Tuple
+
 import numpy as np
+import pandas as pd
 import torch
+from torch.utils.tensorboard import SummaryWriter
 
 from drl_utrans.envs.single_stock import PaperSingleStockEnv
-from drl_utrans.agent.ppo_utrans import PPOUTransAgent, PPOConfig, weight_center_from_bin
+from drl_utrans.agent.drl_utrans import DrlUTransAgent
 
+# -------------------------- feature helpers ---------------------------
+HEADLINE_COLS = [
+    "news_sent_mean_1d",
+    "news_sent_std_1d",
+    "news_sent_maxabs_1d",
+    "news_count_1d"
+    ] 
+TECH_SENT_COLs = ["tech_sent_score"]
 
-def main(
+FEATURE_COLS = [
+    "macd",
+    "macd_sig",
+    "macd_hist",
+    "cci",
+    "wr_14",
+    "boll_up",
+    "boll_low",
+    "kdj_k",
+    "kdj_d",
+    "kdj_j",
+    "ema20",
+    "close_delta",
+    "open_close_diff",
+    "rsi_14",
+]
+
+# ------------------------------ train ---------------------------------
+
+def train_one(
+    *,
     ticker: str,
-    train_csv: str,
+    run_type: str,  # 'baseline' | 'headline' | 'techsent' | 'all'
+    train_csv: str | Path,
     commission_rate: float = 0.001,
     investment_capacity: int = 500,
     epochs: int = 50,
     seed: int | None = 26,
     window_size: int = 12,
-    feature_dim: int = 14,
-    lr: float = 3e-4,
-    rollout_steps: int = 4096,
-    minibatch_size: int = 256,
-    update_epochs: int = 10,
-    n_weight_bins: int = 11,
-):
+    lr: float = 1e-3,
+    batch_size: int = 20,
+    gamma: float = 0.9,
+    replay_memory_size: int = 10_000,
+    target_update_freq: int = 500,
+    epsilon_start: float = 1.0,
+    epsilon_end: float = 0.1,
+    epsilon_decay: float = 0.99,
+    weight_loss_coef: float = 1.0,
+    rand_weights: bool = False,
+    output: bool = True,
+    runs_dir: str | Path = "runs",
+    checkpoints_dir: str | Path = "checkpoints",
+) -> Dict:
+    """Train once and return metadata (including checkpoint path)."""
     if seed is not None:
         np.random.seed(seed)
         torch.manual_seed(seed)
 
-    # ---------- load data ----------
-    import pandas as pd
-    df = pd.read_csv(train_csv, index_col=0, parse_dates=True)
-    features = df[df.columns[:-1]].to_numpy(dtype=np.float32)
+    train_csv = Path(train_csv)
+
+    # Read and normalize index
+    df = pd.read_csv(train_csv)
+
+    s = df["date"]
+    idx = pd.to_datetime(s, errors="coerce")
+    df = df.drop(columns=["date"])  # keep date only as index
+    df.index = idx
+
+
+    if run_type == "baseline":
+        feature_cols = FEATURE_COLS
+    elif run_type == "headline":
+        feature_cols = FEATURE_COLS + HEADLINE_COLS
+    elif run_type == "techsent":
+        feature_cols = FEATURE_COLS + TECH_SENT_COLs
+    elif run_type == "all":
+        feature_cols = FEATURE_COLS + HEADLINE_COLS + TECH_SENT_COLs
+
+    features = df[feature_cols].to_numpy(dtype=np.float32)
     prices = df["close"].to_numpy(dtype=np.float32)
 
     env = PaperSingleStockEnv(
@@ -45,62 +104,113 @@ def main(
         seed=seed,
     )
 
-    cfg = PPOConfig(
-        state_dim=(window_size, feature_dim),
+    agent = DrlUTransAgent(
+        state_dim=(window_size, features.shape[1] + 3),
         lr=lr,
-        rollout_steps=rollout_steps,
-        minibatch_size=minibatch_size,
-        update_epochs=update_epochs,
-        n_weight_bins=n_weight_bins,
+        batch_size=batch_size,
+        gamma=gamma,
+        memory_size=replay_memory_size,
+        target_update_freq=target_update_freq,
+        epsilon_start=epsilon_start,
+        epsilon_end=epsilon_end,
+        epsilon_decay=epsilon_decay,
+        weight_loss_coef=weight_loss_coef,
+        rand_weights=rand_weights,
     )
-    agent = PPOUTransAgent(cfg)
 
-    ckptdir = Path("checkpoints")
-    ckptdir.mkdir(exist_ok=True)
+    logdir = Path(runs_dir) / f"{ticker}_{run_type}_seed{seed or 0}"
+    logdir.mkdir(parents=True, exist_ok=True)
+    writer = SummaryWriter(logdir.as_posix())
 
-    start = perf_counter()
+    ckptdir = Path(checkpoints_dir)
+    ckptdir.mkdir(parents=True, exist_ok=True)
+
+    global_step = 0
+    start_wall = perf_counter()
+    last_info = None
+
     for ep in range(epochs):
+        if output:
+            print(f"Starting epoch {ep + 1}/{epochs} ...", flush=True)
         state_nd = env.reset()
         state = torch.from_numpy(state_nd).float()
+
         ep_reward = 0.0
-        steps_collected = 0
+        losses: List[float] = []
+        actions_log: List[int] = []
+        weights_log: List[float] = []
 
-        while steps_collected < cfg.rollout_steps:
-            a, w, v, _, wb, _ = agent.select_action(state) 
-            next_state, reward, done, info = env.step((a, w))
+        while True:
+            action, w = agent.select_action(state)
+            next_state, reward, done, info = env.step((action, w))
+            last_info = info
 
-            
-            a_exec = info["action"]                                  # 0/1/2 actually taken
-            nonhold_exec = (a_exec != 2)
-            wb_exec = wb if nonhold_exec else 0
+            next_state_t = torch.from_numpy(next_state).float()
+            actions_log.append(info["action"])  # executed action
+            weights_log.append(abs(info["weight"]))
 
-            # recompute joint log-prob for the EXECUTED action under current policy
-            logp_exec = agent.exec_logprob(state, a_exec, wb_exec)
+            agent.store_transition(state, action, w, reward, next_state_t, done)
+            loss = agent.train_step()
+            if loss is not None:
+                losses.append(loss)
 
-            agent.store(state, a_exec, wb_exec, nonhold_exec,
-                        float(reward), bool(done), float(v), float(logp_exec))
-
-            state = torch.from_numpy(next_state).float()
+            state = next_state_t
             ep_reward += reward
-            steps_collected += 1
+            global_step += 1
 
             if done:
-                # restart episode within same rollout collection
-                state = torch.from_numpy(env.reset()).float()
+                break
 
-        agent.update()
-        elapsed = (perf_counter() - start) / 60
-        print(f"Ep {ep+1:03d}/{epochs}  reward {ep_reward:10.2f}  steps {steps_collected:5d}  time {elapsed:5.2f}m")
+        writer.add_scalar("reward/episode", ep_reward, ep)
+        if losses:
+            writer.add_scalar("loss/mean", mean(losses), ep)
+        writer.add_scalar("epsilon", agent.epsilon, ep)
+        if last_info is not None:
+            writer.add_scalar("portfolio/value", last_info.get("portfolio_value", 0.0), ep)
 
-    ckpt_path = ckptdir / f"ppo_utrans_{ticker}.pt"
-    torch.save({"model": agent.model.state_dict(), "cfg": cfg.__dict__}, ckpt_path)
-    print("Saved checkpoint to", ckpt_path)
-    return ckpt_path
+        elapsed = perf_counter() - start_wall
+        buys = sum(1 for a in actions_log if a == 0)
+        sells = sum(1 for a in actions_log if a == 1)
+        avg_w = float(np.mean(weights_log)) if weights_log else 0.0
+        if output:
+            print(
+                f"Ep {ep+1:03d}/{epochs}  "
+                f"reward {ep_reward:8.1f}  ε {agent.epsilon:4.2f}  "
+                f"steps {global_step:5d}  time {elapsed/60:4.1f}m  "
+                f"buys {buys:4d}  sells {sells:4d}  avg_w {avg_w:6.2f}",
+                flush=True,
+            )
+        agent.decay_epsilon()
 
-if __name__ == "__main__":
-    # Example
-    main(
-        ticker="AAPL",
-        train_csv="data/AAPL_train.csv",
-        epochs=10,
-    )
+    # save checkpoint (temp name; runner will promote best)
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    suffix = f"{run_type}_ee{epsilon_end}_wl{weight_loss_coef}_rw{int(rand_weights)}_{stamp}"
+    ckpt_path = Path(checkpoints_dir) / f"utrans_{ticker}_{suffix}.pt"
+    torch.save({"policy": agent.policy_net.state_dict()}, ckpt_path)
+
+    meta = {
+        "ckpt_path": str(ckpt_path),
+        "feature_cols": feature_cols,
+        "feature_dim": int(features.shape[1]),
+        "ticker": ticker,
+        "run_type": run_type,
+        "seed": seed,
+        "hparams": {
+            "commission_rate": commission_rate,
+            "investment_capacity": investment_capacity,
+            "epochs": epochs,
+            "window_size": window_size,
+            "lr": lr,
+            "batch_size": batch_size,
+            "gamma": gamma,
+            "replay_memory_size": replay_memory_size,
+            "target_update_freq": target_update_freq,
+            "epsilon_start": epsilon_start,
+            "epsilon_end": epsilon_end,
+            "epsilon_decay": epsilon_decay,
+            "weight_loss_coef": weight_loss_coef,
+            "rand_weights": rand_weights,
+        },
+        "logdir": str(logdir),
+    }
+    return meta

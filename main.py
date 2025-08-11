@@ -27,17 +27,26 @@ from evaluate import evaluate_one
 RUN_TYPES = ["baseline", "headline", "techsent", "all"]
 
 
-def discover_tickers(data_root: str | Path = "data") -> List[str]:
-    root = Path(data_root)
-    tickers = []
-    for d in root.iterdir():
-        if not d.is_dir():
-            continue
-        if d.name.lower() == "cache":
-            continue
-        if (d / "train.csv").exists() and (d / "test.csv").exists():
-            tickers.append(d.name)
-    return sorted(tickers)
+def _slim_record(train_meta: dict, eval_meta: dict, seed: int) -> dict:
+    """Keep only JSON-safe bits (paths/metrics) for per-run JSON and manifest."""
+    return {
+        "seed": seed,
+        "train": {
+            "ckpt_path": train_meta.get("ckpt_path"),
+            "feature_dim": train_meta.get("feature_dim"),
+            "ticker": train_meta.get("ticker"),
+            "run_type": train_meta.get("run_type"),
+            "seed": train_meta.get("seed"),
+            "hparams": train_meta.get("hparams"),
+            "logdir": train_meta.get("logdir"),
+        },
+        "eval": {
+            "metrics": eval_meta.get("metrics"),
+            "metrics_path": eval_meta.get("metrics_path"),
+            "equity_csv": eval_meta.get("equity_csv"),
+            "plots": eval_meta.get("plots"),
+        },
+    }
 
 
 def pick_best(run_records: List[Dict], metric: str = "CAGR_%") -> Dict:
@@ -92,7 +101,8 @@ def run_for_ticker(
     train_csv = tdir / "train.csv"
     test_csv = tdir / "test.csv"
 
-    exp_records: Dict[str, List[Dict]] = {k: [] for k in RUN_TYPES}
+    exp_records: Dict[str, List[Dict]] = {k: [] for k in RUN_TYPES}        # full (in-memory)
+    exp_records_slim: Dict[str, List[Dict]] = {k: [] for k in RUN_TYPES}   # JSON-safe
 
     # 1) run all seeds WITHOUT plots to avoid clutter
     for run_type in RUN_TYPES:
@@ -114,11 +124,15 @@ def run_for_ticker(
                 save_plots=False,
                 train_csv=train_csv,
             )
-            rec = {"train": train_meta, "eval": eval_meta, "seed": s}
+            rec_full = {"train": train_meta, "eval": eval_meta, "seed": s}
+            rec_slim = _slim_record(train_meta, eval_meta, s)
+
             per_run_json = Path(results_root) / f"{ticker}_{run_type}_seed{s}_record.json"
             with per_run_json.open("w") as f:
-                json.dump(rec, f, indent=2)
-            exp_records[run_type].append(rec)
+                json.dump(rec_slim, f, indent=2)
+
+            exp_records[run_type].append(rec_full)       # keep full for best/plots
+            exp_records_slim[run_type].append(rec_slim)  # store slim for manifest
 
     # 2) choose best per run_type
     best_by_type: Dict[str, Dict] = {
@@ -163,7 +177,7 @@ def run_for_ticker(
         "ticker": ticker,
         "selection_metric": selection_metric,
         "seeds": seeds,
-        "experiments": exp_records,
+        "experiments": exp_records_slim,   # <-- slim version
         "best": {rt: {
             "seed": rec["seed"],
             "ckpt": best_ckpts[rt],
@@ -185,9 +199,9 @@ def run_for_ticker(
 
 def main():
 
-    seeds = [26, 927, 2025] 
+    seeds = [8, 26, 1111] 
 
-    tickers = ["BABA", "BRK", "GOOG", "KO", "MRK", "MS", "NVDA", "QQQ", "T", "WFC"]
+    tickers = [ "BRK", "BABA", "GOOG", "KO", "MRK", "MS", "NVDA", "QQQ", "T", "WFC"]
 
 
     print("Tickers:", tickers)

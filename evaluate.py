@@ -32,20 +32,10 @@ HEADLINE_COLS = [
 TECH_SENT_COLs = ["tech_sent_score"]
 
 FEATURE_COLS = [
-    "macd",
-    "macd_sig",
-    "macd_hist",
-    "cci",
-    "wr_14",
-    "boll_up",
-    "boll_low",
-    "kdj_k",
-    "kdj_d",
-    "kdj_j",
-    "ema20",
-    "close_delta",
+    # "macd",
+    # "kdj_k",
     "open_close_diff",
-    "rsi_14",
+    # "rsi_14",
 ]
 
 

@@ -1,0 +1,46 @@
+{
+  "seed": 1111,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_BRK_baseline_ee0.1_wl0.0_rw1_20250811-164212.pt",
+    "feature_dim": 1,
+    "ticker": "BRK",
+    "run_type": "baseline",
+    "seed": 1111,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/BRK_baseline_seed1111"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 6.173336505889893,
+      "CAGR_%": 2.140641212463379,
+      "Sharpe": 4.74821842230214,
+      "MaxDD_%": -94.35521697998047,
+      "total_trades": 1,
+      "bh_final_return_%": 2.840900421142578,
+      "bh_CAGR_%": 0.9954094886779785,
+      "bh_Sharpe": 4.825786896238835,
+      "bh_MaxDD_%": -94.36065673828125
+    },
+    "metrics_path": "results/BRK_baseline_metrics.json",
+    "equity_csv": "results/BRK_baseline_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

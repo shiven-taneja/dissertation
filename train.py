@@ -24,20 +24,10 @@ HEADLINE_COLS = [
 TECH_SENT_COLs = ["tech_sent_score"]
 
 FEATURE_COLS = [
-    "macd",
-    "macd_sig",
-    "macd_hist",
-    "cci",
-    "wr_14",
-    "boll_up",
-    "boll_low",
-    "kdj_k",
-    "kdj_d",
-    "kdj_j",
-    "ema20",
-    "close_delta",
+    # "macd",
+    # "kdj_k",
     "open_close_diff",
-    "rsi_14",
+    # "rsi_14",
 ]
 
 # ------------------------------ train ---------------------------------
@@ -54,14 +44,14 @@ def train_one(
     window_size: int = 12,
     lr: float = 1e-3,
     batch_size: int = 20,
-    gamma: float = 0.9,
+    gamma: float = 0.99,
     replay_memory_size: int = 10_000,
     target_update_freq: int = 500,
     epsilon_start: float = 1.0,
     epsilon_end: float = 0.1,
     epsilon_decay: float = 0.99,
-    weight_loss_coef: float = 1.0,
-    rand_weights: bool = False,
+    weight_loss_coef: float = 0.0,
+    rand_weights: bool = True,
     output: bool = True,
     runs_dir: str | Path = "runs",
     checkpoints_dir: str | Path = "checkpoints",

@@ -59,7 +59,7 @@ class UTransNet(nn.Module):
 
         # --- Dual heads ------------------------------------------------------
         # global average over the sequence length → 1 × 64 vector
-        self.act_head   = nn.Linear(64, n_actions)    # categorical action
+        self.act_head   = nn.Linear(65, n_actions)    # categorical action
         self.weight_head = nn.Sequential(
             nn.Linear(64, 1),
             nn.Sigmoid()                              # 0-1 weighting
@@ -93,9 +93,14 @@ class UTransNet(nn.Module):
 
         # Heads ---------------------------------------------------------------
         # pooled = final.mean(dim=1)        # global average over sequence
-        pooled = final[:, -1, :]  # take the last time step (as in the paper)
+        # pooled = final[:, -1, :]  # take the last time step (as in the paper)
         # pooled = final.squeeze(1)  # (batch, 64)
-        q_values   = self.act_head(pooled)
+        pooled = final.mean(dim=1)  # global average over sequence (changed from last timestep)
         act_weight = self.weight_head(pooled).squeeze(-1)
+        pooled_with_weight = torch.cat([pooled, act_weight.unsqueeze(1)], dim=1)  # (batch, 65)
+        q_values   = self.act_head(pooled_with_weight)
+
+        # q_values   = self.act_head(pooled)
+
 
         return q_values, act_weight

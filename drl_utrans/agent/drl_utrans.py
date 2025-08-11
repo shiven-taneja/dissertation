@@ -67,9 +67,9 @@ class DrlUTransAgent:
         # Counter for training steps (for target network updates)
         self.train_steps = 0
         # Compile model for performance (PyTorch 2.x)
-        if hasattr(torch, 'compile'):
-            self.policy_net = torch.compile(self.policy_net)
-            self.target_net = torch.compile(self.target_net)
+        # if hasattr(torch, 'compile'):
+        #     self.policy_net = torch.compile(self.policy_net)
+        #     self.target_net = torch.compile(self.target_net)
         self.rand_weights = rand_weights
 
     def select_action(self, state: torch.Tensor, eval_mode=False) -> Tuple[int, float]:

@@ -1,19 +1,10 @@
 from __future__ import annotations
-
 import random
 from typing import Tuple, Optional
-
 import numpy as np
 import pandas as pd
-import torch
-
 
 class PaperSingleStockEnv:
-    """
-    Fixed single-stock trading environment with proper state handling
-    and action execution.
-    """
-
     def __init__(
         self,
         features: np.ndarray | pd.DataFrame,
@@ -24,7 +15,6 @@ class PaperSingleStockEnv:
         train_mode: bool = True,
         seed: Optional[int] = None,
     ):
-        # Store market data
         if isinstance(features, pd.DataFrame):
             features = features.to_numpy()
         elif not isinstance(features, np.ndarray):
@@ -37,85 +27,56 @@ class PaperSingleStockEnv:
 
         assert len(self.X) == len(self.P), "features and price length mismatch!"
 
-        # Static hyper-params
         self.L = window_size
         self.ic0 = ic_shares
         self.commission = commission
         self.train_mode = train_mode
         self.rng = random.Random(seed)
 
-        # Pointer bounds - fixed to prevent looking ahead
-        self.max_ptr = len(self.X) - 1  # last valid index
-        
-        # Episode bookkeeping
+        self.max_ptr = len(self.X) - 1
         self.reset()
 
     def _portfolio_features(self, P_t: float) -> np.ndarray:
-
-        position_frac = self.H / max(self.IC, 1e-8)
-        cash_frac = self.cash / max(self.cash + self.H * P_t, 1e-8)
+        equity = self.cash + self.H * P_t
+        position_frac = (self.H / max(self.IC, 1e-8))
+        cash_frac = (self.cash / max(equity, 1e-8))
         remaining_capacity = (self.IC - self.H) / max(self.IC, 1e-8)
-
-
-        pf = np.array([
-            position_frac, cash_frac,
-            remaining_capacity,
-        ], dtype=np.float32)
-        # Optional: clip to sane range
+        pf = np.array([position_frac, cash_frac, remaining_capacity], dtype=np.float32)
         return np.clip(pf, -2.0, 2.0)
-    
+
     def _state(self) -> np.ndarray:
         start_idx = max(0, self.ptr - self.L + 1)
         end_idx = self.ptr + 1
-        base = self.X[start_idx:end_idx]  # (t, F)
+        base = self.X[start_idx:end_idx]
         if base.shape[0] < self.L:
             padding = np.zeros((self.L - base.shape[0], base.shape[1]), dtype=np.float32)
             base = np.concatenate([padding, base], axis=0)
-
         P_t = self.P[self.ptr]
-        pf = self._portfolio_features(P_t)                 # (K,)
-        pf_block = np.tile(pf[None, :], (self.L, 1))       # (L, K)
-
-        # Easiest: broadcast across the window
-        state = np.concatenate([base, pf_block], axis=1)   # (L, F+K)
-
-        # If you prefer a CLS-like last-row injection:
-        # pf_block[:] = 0.0
-        # pf_block[-1] = pf
-        # state = np.concatenate([base, pf_block], axis=1)
+        pf = self._portfolio_features(P_t)
+        pf_block = np.tile(pf[None, :], (self.L, 1))
+        state = np.concatenate([base, pf_block], axis=1)
         return state.astype(np.float32)
-        
+
     def _done(self) -> bool:
-        """Episode ends when we reach the end of data."""
         return self.ptr >= self.max_ptr - 1
 
     def _cost_basis(self) -> float:
         return self.I / self.H if self.H > 0 else 0.0
 
     def reset(self) -> np.ndarray:
-        """Reset environment to initial state."""
-        # if self.train_mode:
-        #     # Random start for training (ensure we have enough data)
-        #     min_start = self.L - 1
-        #     max_start = max(min_start, self.max_ptr - 100)  # Ensure at least 100 steps
-        #     self.ptr = self.rng.randint(min_start, max_start)
-        # else:
-        #     # Fixed start for evaluation
-        #     self.ptr = self.L - 1
-
         self.ptr = self.L - 1
-        
-        # Portfolio variables
-        self.H = 0      # shares held
-        self.I = 0.0    # invested amount
-        self.IC = self.ic0  # investment capacity
-        
-        # Initialize cash
+        self.H = 0
+        self.I = 0.0
+        self.IC = self.ic0
         P0 = self.P[self.ptr]
         self.cash0 = P0 * self.ic0
         self.cash = self.cash0
-        
         return self._state()
+
+    def portfolio_value(self, P_t: Optional[float] = None) -> float:
+        if P_t is None:
+            P_t = self.P[min(self.ptr, len(self.P) - 1)]
+        return self.cash + self.H * P_t
 
     def step(self, act_weight: Tuple[int, float]):
         """
@@ -224,11 +185,3 @@ class PaperSingleStockEnv:
         }
         
         return next_state.astype(np.float32), reward, done, info
-
-    def portfolio_value(self, P_t: Optional[float] = None) -> float:
-        """Calculate total portfolio value."""
-        if P_t is None:
-            P_t = self.P[min(self.ptr, len(self.P) - 1)]
-        return self.cash + self.H * P_t
-    
-    

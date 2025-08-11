@@ -43,12 +43,12 @@ def train_one(
     seed: int | None = 26,
     window_size: int = 12,
     lr: float = 1e-3,
-    batch_size: int = 20,
+    batch_size: int = 64,
     gamma: float = 0.99,
-    replay_memory_size: int = 10_000,
-    target_update_freq: int = 500,
+    replay_memory_size: int = 100_000,
+    target_update_freq: int = 1000,
     epsilon_start: float = 1.0,
-    epsilon_end: float = 0.1,
+    epsilon_end: float = 0.05,
     epsilon_decay: float = 0.99,
     weight_loss_coef: float = 0.0,
     rand_weights: bool = True,
@@ -135,11 +135,15 @@ def train_one(
             next_state, reward, done, info = env.step((action, w))
             last_info = info
 
-            next_state_t = torch.from_numpy(next_state).float()
-            actions_log.append(info["action"])  # executed action
-            weights_log.append(abs(info["weight"]))
+            # use executed action/weight from env
+            exec_action = info["action"]
+            exec_weight = float(info.get("weight", 0.0))
 
-            agent.store_transition(state, action, w, reward, next_state_t, done)
+            next_state_t = torch.from_numpy(next_state).float()
+            actions_log.append(exec_action)
+            weights_log.append(abs(exec_weight))
+
+            agent.store_transition(state, exec_action, exec_weight, reward, next_state_t, done)
             loss = agent.train_step()
             if loss is not None:
                 losses.append(loss)
@@ -170,7 +174,7 @@ def train_one(
                 f"buys {buys:4d}  sells {sells:4d}  avg_w {avg_w:6.2f}",
                 flush=True,
             )
-        agent.decay_epsilon()
+        # agent.decay_epsilon()
 
     # save checkpoint (temp name; runner will promote best)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")

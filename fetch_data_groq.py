@@ -32,7 +32,7 @@ CACHE_ROOT = DATA_ROOT / "cache"
 CACHE_ROOT.mkdir(parents=True, exist_ok=True)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_BASE_URL = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
+GROQ_BASE_URL = os.getenv("GROQ_BASE_URL", "https://api.groq.com")
 GROQ_MODEL = os.getenv("GROQ_MODEL")  # per user request
 REQUEST_TIMEOUT = float(os.getenv("GROQ_TIMEOUT", "40"))
 
@@ -147,7 +147,7 @@ def groq_chat_json(system: str, user_content: str, response_keys: Tuple[str, ...
                 api_key=GROQ_API_KEY,
             )
             completion = client.chat.completions.create(
-                model="openai/gpt-oss-20b",
+                model="openai/gpt-oss-120b",
                 temperature= 0.0,
                 top_p= 1.0,
                 messages= [

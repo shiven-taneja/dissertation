@@ -204,7 +204,7 @@ def main():
     seeds = [8, 26, 1111] 
 
     # tickers = [ "DIS", "BABA", "GOOG", "KO", "MRK", "MS", "NVDA", "QQQ", "T", "WFC"]
-    tickers = ["DIS"]
+    tickers = ["GE"]
 
 
     print("Tickers:", tickers)
@@ -231,5 +231,5 @@ def main():
 
 
 if __name__ == "__main__":
-    build_datasets_with_llm("DIS")  # Fetch data with LLM
-    main()
+    build_datasets_with_llm("GE")  # Fetch data with LLM
+    # main()

@@ -1,0 +1,643 @@
+{
+  "ticker": "BABA",
+  "selection_metric": "final_return_%",
+  "seeds": [
+    8,
+    26,
+    1111
+  ],
+  "experiments": {
+    "baseline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_baseline_ee0.1_wl0.0_rw1_20250813-135447.pt",
+          "feature_dim": 4,
+          "ticker": "BABA",
+          "run_type": "baseline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_baseline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -62.416255950927734,
+            "CAGR_%": -30.87468147277832,
+            "Sharpe": -0.5944718335696149,
+            "MaxDD_%": -62.416255950927734,
+            "total_trades": 6,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_baseline_metrics.json",
+          "equity_csv": "results/BABA_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_baseline_ee0.1_wl0.0_rw1_20250813-141735.pt",
+          "feature_dim": 4,
+          "ticker": "BABA",
+          "run_type": "baseline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_baseline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -55.00157928466797,
+            "CAGR_%": -26.015138626098633,
+            "Sharpe": -0.4980689558519664,
+            "MaxDD_%": -59.9313850402832,
+            "total_trades": 13,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_baseline_metrics.json",
+          "equity_csv": "results/BABA_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_baseline_ee0.1_wl0.0_rw1_20250813-142845.pt",
+          "feature_dim": 4,
+          "ticker": "BABA",
+          "run_type": "baseline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_baseline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -46.29660415649414,
+            "CAGR_%": -20.909727096557617,
+            "Sharpe": -0.3605672569661219,
+            "MaxDD_%": -58.225460052490234,
+            "total_trades": 25,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_baseline_metrics.json",
+          "equity_csv": "results/BABA_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "headline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_headline_ee0.1_wl0.0_rw1_20250813-143904.pt",
+          "feature_dim": 8,
+          "ticker": "BABA",
+          "run_type": "headline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_headline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -67.01032257080078,
+            "CAGR_%": -34.19296646118164,
+            "Sharpe": -0.47349502056157167,
+            "MaxDD_%": -73.2514877319336,
+            "total_trades": 7,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_headline_metrics.json",
+          "equity_csv": "results/BABA_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_headline_ee0.1_wl0.0_rw1_20250813-144908.pt",
+          "feature_dim": 8,
+          "ticker": "BABA",
+          "run_type": "headline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_headline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -72.93326568603516,
+            "CAGR_%": -38.927711486816406,
+            "Sharpe": -0.6612058809212343,
+            "MaxDD_%": -76.70161437988281,
+            "total_trades": 22,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_headline_metrics.json",
+          "equity_csv": "results/BABA_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_headline_ee0.1_wl0.0_rw1_20250813-145917.pt",
+          "feature_dim": 8,
+          "ticker": "BABA",
+          "run_type": "headline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_headline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -70.52105712890625,
+            "CAGR_%": -36.92839050292969,
+            "Sharpe": -0.5700216149480838,
+            "MaxDD_%": -73.04829406738281,
+            "total_trades": 50,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_headline_metrics.json",
+          "equity_csv": "results/BABA_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "techsent": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_techsent_ee0.1_wl0.0_rw1_20250813-150924.pt",
+          "feature_dim": 5,
+          "ticker": "BABA",
+          "run_type": "techsent",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_techsent_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -52.18871307373047,
+            "CAGR_%": -24.302936553955078,
+            "Sharpe": -0.4930500040576507,
+            "MaxDD_%": -54.586307525634766,
+            "total_trades": 76,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_techsent_metrics.json",
+          "equity_csv": "results/BABA_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_techsent_ee0.1_wl0.0_rw1_20250813-151929.pt",
+          "feature_dim": 5,
+          "ticker": "BABA",
+          "run_type": "techsent",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_techsent_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -69.7728042602539,
+            "CAGR_%": -36.32903289794922,
+            "Sharpe": -0.5702266516037536,
+            "MaxDD_%": -73.62154388427734,
+            "total_trades": 13,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_techsent_metrics.json",
+          "equity_csv": "results/BABA_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_techsent_ee0.1_wl0.0_rw1_20250813-152934.pt",
+          "feature_dim": 5,
+          "ticker": "BABA",
+          "run_type": "techsent",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_techsent_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -68.42034149169922,
+            "CAGR_%": -35.26871109008789,
+            "Sharpe": -0.490426648049025,
+            "MaxDD_%": -73.2514877319336,
+            "total_trades": 1,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_techsent_metrics.json",
+          "equity_csv": "results/BABA_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "all": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_all_ee0.1_wl0.0_rw1_20250813-153942.pt",
+          "feature_dim": 9,
+          "ticker": "BABA",
+          "run_type": "all",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_all_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -64.54002380371094,
+            "CAGR_%": -32.375301361083984,
+            "Sharpe": -0.5409958185315971,
+            "MaxDD_%": -67.40509796142578,
+            "total_trades": 13,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_all_metrics.json",
+          "equity_csv": "results/BABA_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_all_ee0.1_wl0.0_rw1_20250813-154951.pt",
+          "feature_dim": 9,
+          "ticker": "BABA",
+          "run_type": "all",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_all_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -68.42034149169922,
+            "CAGR_%": -35.26871109008789,
+            "Sharpe": -0.490426648049025,
+            "MaxDD_%": -73.2514877319336,
+            "total_trades": 1,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_all_metrics.json",
+          "equity_csv": "results/BABA_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_BABA_all_ee0.1_wl0.0_rw1_20250813-155954.pt",
+          "feature_dim": 9,
+          "ticker": "BABA",
+          "run_type": "all",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/BABA_all_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -68.07808685302734,
+            "CAGR_%": -35.00489044189453,
+            "Sharpe": -0.4874938362882417,
+            "MaxDD_%": -73.2514877319336,
+            "total_trades": 3,
+            "bh_final_return_%": -66.85752868652344,
+            "bh_CAGR_%": -34.078128814697266,
+            "bh_Sharpe": -0.4501197861337538,
+            "bh_MaxDD_%": -74.11991119384766
+          },
+          "metrics_path": "results/BABA_all_metrics.json",
+          "equity_csv": "results/BABA_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ]
+  },
+  "best": {
+    "baseline": {
+      "seed": 1111,
+      "ckpt": "checkpoints/BABA/utrans_BABA_baseline_best_seed1111.pt",
+      "metrics": {
+        "final_return_%": -46.29660415649414,
+        "CAGR_%": -20.909727096557617,
+        "Sharpe": -0.3605672569661219,
+        "MaxDD_%": -58.225460052490234,
+        "total_trades": 25,
+        "bh_final_return_%": -66.85752868652344,
+        "bh_CAGR_%": -34.078128814697266,
+        "bh_Sharpe": -0.4501197861337538,
+        "bh_MaxDD_%": -74.11991119384766
+      },
+      "equity_csv": "results/BABA_baseline_equity.csv",
+      "metrics_json": "results/BABA_baseline_metrics.json"
+    },
+    "headline": {
+      "seed": 8,
+      "ckpt": "checkpoints/BABA/utrans_BABA_headline_best_seed8.pt",
+      "metrics": {
+        "final_return_%": -67.01032257080078,
+        "CAGR_%": -34.19296646118164,
+        "Sharpe": -0.47349502056157167,
+        "MaxDD_%": -73.2514877319336,
+        "total_trades": 7,
+        "bh_final_return_%": -66.85752868652344,
+        "bh_CAGR_%": -34.078128814697266,
+        "bh_Sharpe": -0.4501197861337538,
+        "bh_MaxDD_%": -74.11991119384766
+      },
+      "equity_csv": "results/BABA_headline_equity.csv",
+      "metrics_json": "results/BABA_headline_metrics.json"
+    },
+    "techsent": {
+      "seed": 8,
+      "ckpt": "checkpoints/BABA/utrans_BABA_techsent_best_seed8.pt",
+      "metrics": {
+        "final_return_%": -52.18871307373047,
+        "CAGR_%": -24.302936553955078,
+        "Sharpe": -0.4930500040576507,
+        "MaxDD_%": -54.586307525634766,
+        "total_trades": 76,
+        "bh_final_return_%": -66.85752868652344,
+        "bh_CAGR_%": -34.078128814697266,
+        "bh_Sharpe": -0.4501197861337538,
+        "bh_MaxDD_%": -74.11991119384766
+      },
+      "equity_csv": "results/BABA_techsent_equity.csv",
+      "metrics_json": "results/BABA_techsent_metrics.json"
+    },
+    "all": {
+      "seed": 8,
+      "ckpt": "checkpoints/BABA/utrans_BABA_all_best_seed8.pt",
+      "metrics": {
+        "final_return_%": -64.54002380371094,
+        "CAGR_%": -32.375301361083984,
+        "Sharpe": -0.5409958185315971,
+        "MaxDD_%": -67.40509796142578,
+        "total_trades": 13,
+        "bh_final_return_%": -66.85752868652344,
+        "bh_CAGR_%": -34.078128814697266,
+        "bh_Sharpe": -0.4501197861337538,
+        "bh_MaxDD_%": -74.11991119384766
+      },
+      "equity_csv": "results/BABA_all_equity.csv",
+      "metrics_json": "results/BABA_all_metrics.json"
+    }
+  },
+  "combined_plot": "results/plots/BABA/combined_best_BABA.png",
+  "best_table_csv": "results/BABA_best_summary.csv"
+}

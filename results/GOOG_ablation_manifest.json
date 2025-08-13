@@ -1,0 +1,643 @@
+{
+  "ticker": "GOOG",
+  "selection_metric": "final_return_%",
+  "seeds": [
+    8,
+    26,
+    1111
+  ],
+  "experiments": {
+    "baseline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_baseline_ee0.1_wl0.0_rw1_20250813-124345.pt",
+          "feature_dim": 4,
+          "ticker": "GOOG",
+          "run_type": "baseline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_baseline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 21.967077255249023,
+            "CAGR_%": 14.606893539428711,
+            "Sharpe": 0.5700397229287829,
+            "MaxDD_%": -32.02713394165039,
+            "total_trades": 1,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_baseline_metrics.json",
+          "equity_csv": "results/GOOG_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_baseline_ee0.1_wl0.0_rw1_20250813-124920.pt",
+          "feature_dim": 4,
+          "ticker": "GOOG",
+          "run_type": "baseline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_baseline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 22.166656494140625,
+            "CAGR_%": 14.735614776611328,
+            "Sharpe": 0.5874424557577885,
+            "MaxDD_%": -27.846750259399414,
+            "total_trades": 5,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_baseline_metrics.json",
+          "equity_csv": "results/GOOG_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_baseline_ee0.1_wl0.0_rw1_20250813-125454.pt",
+          "feature_dim": 4,
+          "ticker": "GOOG",
+          "run_type": "baseline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_baseline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 3.651285171508789,
+            "CAGR_%": 2.492702007293701,
+            "Sharpe": 0.23666547817094816,
+            "MaxDD_%": -36.47955322265625,
+            "total_trades": 11,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_baseline_metrics.json",
+          "equity_csv": "results/GOOG_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "headline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_headline_ee0.1_wl0.0_rw1_20250813-130025.pt",
+          "feature_dim": 8,
+          "ticker": "GOOG",
+          "run_type": "headline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_headline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 13.588058471679688,
+            "CAGR_%": 9.141325950622559,
+            "Sharpe": 0.42845857980169955,
+            "MaxDD_%": -33.620243072509766,
+            "total_trades": 11,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_headline_metrics.json",
+          "equity_csv": "results/GOOG_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_headline_ee0.1_wl0.0_rw1_20250813-130559.pt",
+          "feature_dim": 8,
+          "ticker": "GOOG",
+          "run_type": "headline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_headline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 23.03413200378418,
+            "CAGR_%": 15.294337272644043,
+            "Sharpe": 0.6093684387303199,
+            "MaxDD_%": -26.70671272277832,
+            "total_trades": 5,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_headline_metrics.json",
+          "equity_csv": "results/GOOG_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_headline_ee0.1_wl0.0_rw1_20250813-131131.pt",
+          "feature_dim": 8,
+          "ticker": "GOOG",
+          "run_type": "headline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_headline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 15.848231315612793,
+            "CAGR_%": 10.627710342407227,
+            "Sharpe": 0.46839719547351377,
+            "MaxDD_%": -32.02960968017578,
+            "total_trades": 1,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_headline_metrics.json",
+          "equity_csv": "results/GOOG_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "techsent": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_techsent_ee0.1_wl0.0_rw1_20250813-131700.pt",
+          "feature_dim": 5,
+          "ticker": "GOOG",
+          "run_type": "techsent",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_techsent_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 21.967077255249023,
+            "CAGR_%": 14.606893539428711,
+            "Sharpe": 0.5700397229287829,
+            "MaxDD_%": -32.02713394165039,
+            "total_trades": 1,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_techsent_metrics.json",
+          "equity_csv": "results/GOOG_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_techsent_ee0.1_wl0.0_rw1_20250813-132233.pt",
+          "feature_dim": 5,
+          "ticker": "GOOG",
+          "run_type": "techsent",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_techsent_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 21.967077255249023,
+            "CAGR_%": 14.606893539428711,
+            "Sharpe": 0.5700397229287829,
+            "MaxDD_%": -32.02713394165039,
+            "total_trades": 1,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_techsent_metrics.json",
+          "equity_csv": "results/GOOG_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_techsent_ee0.1_wl0.0_rw1_20250813-132805.pt",
+          "feature_dim": 5,
+          "ticker": "GOOG",
+          "run_type": "techsent",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_techsent_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 17.290794372558594,
+            "CAGR_%": 11.571645736694336,
+            "Sharpe": 0.4943851872628973,
+            "MaxDD_%": -33.265830993652344,
+            "total_trades": 7,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_techsent_metrics.json",
+          "equity_csv": "results/GOOG_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "all": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_all_ee0.1_wl0.0_rw1_20250813-133333.pt",
+          "feature_dim": 9,
+          "ticker": "GOOG",
+          "run_type": "all",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_all_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 21.967077255249023,
+            "CAGR_%": 14.606893539428711,
+            "Sharpe": 0.5700397229287829,
+            "MaxDD_%": -32.02713394165039,
+            "total_trades": 1,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_all_metrics.json",
+          "equity_csv": "results/GOOG_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_all_ee0.1_wl0.0_rw1_20250813-133908.pt",
+          "feature_dim": 9,
+          "ticker": "GOOG",
+          "run_type": "all",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_all_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 17.530393600463867,
+            "CAGR_%": 11.728072166442871,
+            "Sharpe": 0.4959414305132833,
+            "MaxDD_%": -33.94765853881836,
+            "total_trades": 5,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_all_metrics.json",
+          "equity_csv": "results/GOOG_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GOOG_all_ee0.1_wl0.0_rw1_20250813-134442.pt",
+          "feature_dim": 9,
+          "ticker": "GOOG",
+          "run_type": "all",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GOOG_all_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 15.785408020019531,
+            "CAGR_%": 10.586511611938477,
+            "Sharpe": 0.4663138292033736,
+            "MaxDD_%": -32.029457092285156,
+            "total_trades": 3,
+            "bh_final_return_%": 23.561359405517578,
+            "bh_CAGR_%": 15.633320808410645,
+            "bh_Sharpe": 0.5934196690682217,
+            "bh_MaxDD_%": -32.05568313598633
+          },
+          "metrics_path": "results/GOOG_all_metrics.json",
+          "equity_csv": "results/GOOG_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ]
+  },
+  "best": {
+    "baseline": {
+      "seed": 26,
+      "ckpt": "checkpoints/GOOG/utrans_GOOG_baseline_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 22.166656494140625,
+        "CAGR_%": 14.735614776611328,
+        "Sharpe": 0.5874424557577885,
+        "MaxDD_%": -27.846750259399414,
+        "total_trades": 5,
+        "bh_final_return_%": 23.561359405517578,
+        "bh_CAGR_%": 15.633320808410645,
+        "bh_Sharpe": 0.5934196690682217,
+        "bh_MaxDD_%": -32.05568313598633
+      },
+      "equity_csv": "results/GOOG_baseline_equity.csv",
+      "metrics_json": "results/GOOG_baseline_metrics.json"
+    },
+    "headline": {
+      "seed": 26,
+      "ckpt": "checkpoints/GOOG/utrans_GOOG_headline_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 23.03413200378418,
+        "CAGR_%": 15.294337272644043,
+        "Sharpe": 0.6093684387303199,
+        "MaxDD_%": -26.70671272277832,
+        "total_trades": 5,
+        "bh_final_return_%": 23.561359405517578,
+        "bh_CAGR_%": 15.633320808410645,
+        "bh_Sharpe": 0.5934196690682217,
+        "bh_MaxDD_%": -32.05568313598633
+      },
+      "equity_csv": "results/GOOG_headline_equity.csv",
+      "metrics_json": "results/GOOG_headline_metrics.json"
+    },
+    "techsent": {
+      "seed": 8,
+      "ckpt": "checkpoints/GOOG/utrans_GOOG_techsent_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 21.967077255249023,
+        "CAGR_%": 14.606893539428711,
+        "Sharpe": 0.5700397229287829,
+        "MaxDD_%": -32.02713394165039,
+        "total_trades": 1,
+        "bh_final_return_%": 23.561359405517578,
+        "bh_CAGR_%": 15.633320808410645,
+        "bh_Sharpe": 0.5934196690682217,
+        "bh_MaxDD_%": -32.05568313598633
+      },
+      "equity_csv": "results/GOOG_techsent_equity.csv",
+      "metrics_json": "results/GOOG_techsent_metrics.json"
+    },
+    "all": {
+      "seed": 8,
+      "ckpt": "checkpoints/GOOG/utrans_GOOG_all_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 21.967077255249023,
+        "CAGR_%": 14.606893539428711,
+        "Sharpe": 0.5700397229287829,
+        "MaxDD_%": -32.02713394165039,
+        "total_trades": 1,
+        "bh_final_return_%": 23.561359405517578,
+        "bh_CAGR_%": 15.633320808410645,
+        "bh_Sharpe": 0.5934196690682217,
+        "bh_MaxDD_%": -32.05568313598633
+      },
+      "equity_csv": "results/GOOG_all_equity.csv",
+      "metrics_json": "results/GOOG_all_metrics.json"
+    }
+  },
+  "combined_plot": "results/plots/GOOG/combined_best_GOOG.png",
+  "best_table_csv": "results/GOOG_best_summary.csv"
+}

@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_MS_headline_ee0.1_wl0.0_rw1_20250812-054820.pt",
+    "feature_dim": 5,
+    "ticker": "MS",
+    "run_type": "headline",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/MS_headline_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 85.82990264892578,
+      "CAGR_%": 16.31002426147461,
+      "Sharpe": 0.6035756459745756,
+      "MaxDD_%": -51.3092155456543,
+      "total_trades": 12,
+      "bh_final_return_%": 95.4928970336914,
+      "bh_CAGR_%": 17.756546020507812,
+      "bh_Sharpe": 0.624842105401868,
+      "bh_MaxDD_%": -51.325828552246094
+    },
+    "metrics_path": "results/MS_headline_metrics.json",
+    "equity_csv": "results/MS_headline_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

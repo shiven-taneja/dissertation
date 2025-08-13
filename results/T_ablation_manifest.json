@@ -1,0 +1,643 @@
+{
+  "ticker": "T",
+  "selection_metric": "final_return_%",
+  "seeds": [
+    8,
+    26,
+    1111
+  ],
+  "experiments": {
+    "baseline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_baseline_ee0.1_wl0.0_rw1_20250812-221910.pt",
+          "feature_dim": 4,
+          "ticker": "T",
+          "run_type": "baseline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_baseline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 3.0048012733459473,
+            "CAGR_%": 1.3677358627319336,
+            "Sharpe": 0.17921955788230598,
+            "MaxDD_%": -29.259761810302734,
+            "total_trades": 17,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_baseline_metrics.json",
+          "equity_csv": "results/T_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_baseline_ee0.1_wl0.0_rw1_20250812-222731.pt",
+          "feature_dim": 4,
+          "ticker": "T",
+          "run_type": "baseline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_baseline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -6.855833530426025,
+            "CAGR_%": -3.206348419189453,
+            "Sharpe": -0.0041759472371497046,
+            "MaxDD_%": -29.76161766052246,
+            "total_trades": 22,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_baseline_metrics.json",
+          "equity_csv": "results/T_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_baseline_ee0.1_wl0.0_rw1_20250812-223550.pt",
+          "feature_dim": 4,
+          "ticker": "T",
+          "run_type": "baseline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_baseline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -6.852269172668457,
+            "CAGR_%": -3.2046496868133545,
+            "Sharpe": 0.00873841620383198,
+            "MaxDD_%": -31.591678619384766,
+            "total_trades": 11,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_baseline_metrics.json",
+          "equity_csv": "results/T_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "headline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_headline_ee0.1_wl0.0_rw1_20250812-224410.pt",
+          "feature_dim": 8,
+          "ticker": "T",
+          "run_type": "headline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_headline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -4.973316192626953,
+            "CAGR_%": -2.3135602474212646,
+            "Sharpe": 0.04340828794205284,
+            "MaxDD_%": -31.260517120361328,
+            "total_trades": 3,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_headline_metrics.json",
+          "equity_csv": "results/T_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_headline_ee0.1_wl0.0_rw1_20250812-225231.pt",
+          "feature_dim": 8,
+          "ticker": "T",
+          "run_type": "headline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_headline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -11.182319641113281,
+            "CAGR_%": -5.295938491821289,
+            "Sharpe": -0.07931656809267537,
+            "MaxDD_%": -31.69867706298828,
+            "total_trades": 58,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_headline_metrics.json",
+          "equity_csv": "results/T_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_headline_ee0.1_wl0.0_rw1_20250812-230049.pt",
+          "feature_dim": 8,
+          "ticker": "T",
+          "run_type": "headline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_headline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -6.349992752075195,
+            "CAGR_%": -2.9655039310455322,
+            "Sharpe": 0.012636612324727948,
+            "MaxDD_%": -33.29283142089844,
+            "total_trades": 8,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_headline_metrics.json",
+          "equity_csv": "results/T_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "techsent": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_techsent_ee0.1_wl0.0_rw1_20250812-230910.pt",
+          "feature_dim": 5,
+          "ticker": "T",
+          "run_type": "techsent",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_techsent_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 1.3185381889343262,
+            "CAGR_%": 0.602877140045166,
+            "Sharpe": 0.14038556649204972,
+            "MaxDD_%": -30.232906341552734,
+            "total_trades": 47,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_techsent_metrics.json",
+          "equity_csv": "results/T_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_techsent_ee0.1_wl0.0_rw1_20250812-231725.pt",
+          "feature_dim": 5,
+          "ticker": "T",
+          "run_type": "techsent",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_techsent_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -0.6274282932281494,
+            "CAGR_%": -0.28839111328125,
+            "Sharpe": 0.11060361289423425,
+            "MaxDD_%": -29.471450805664062,
+            "total_trades": 59,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_techsent_metrics.json",
+          "equity_csv": "results/T_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_techsent_ee0.1_wl0.0_rw1_20250812-232546.pt",
+          "feature_dim": 5,
+          "ticker": "T",
+          "run_type": "techsent",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_techsent_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -20.987951278686523,
+            "CAGR_%": -10.245573043823242,
+            "Sharpe": -0.4004069901773923,
+            "MaxDD_%": -42.323970794677734,
+            "total_trades": 94,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_techsent_metrics.json",
+          "equity_csv": "results/T_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "all": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_all_ee0.1_wl0.0_rw1_20250812-233405.pt",
+          "feature_dim": 9,
+          "ticker": "T",
+          "run_type": "all",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_all_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -6.100618839263916,
+            "CAGR_%": -2.8470218181610107,
+            "Sharpe": 0.028168560676300327,
+            "MaxDD_%": -31.880149841308594,
+            "total_trades": 9,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_all_metrics.json",
+          "equity_csv": "results/T_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_all_ee0.1_wl0.0_rw1_20250812-234225.pt",
+          "feature_dim": 9,
+          "ticker": "T",
+          "run_type": "all",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_all_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -1.3811588287353516,
+            "CAGR_%": -0.636136531829834,
+            "Sharpe": 0.11025642542342887,
+            "MaxDD_%": -31.587940216064453,
+            "total_trades": 5,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_all_metrics.json",
+          "equity_csv": "results/T_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_T_all_ee0.1_wl0.0_rw1_20250812-235040.pt",
+          "feature_dim": 9,
+          "ticker": "T",
+          "run_type": "all",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/T_all_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 5.17960786819458,
+            "CAGR_%": 2.3442506790161133,
+            "Sharpe": 0.21684038132598796,
+            "MaxDD_%": -31.11615753173828,
+            "total_trades": 5,
+            "bh_final_return_%": -6.423920631408691,
+            "bh_CAGR_%": -3.0006587505340576,
+            "bh_Sharpe": 0.02347135803673519,
+            "bh_MaxDD_%": -32.008018493652344
+          },
+          "metrics_path": "results/T_all_metrics.json",
+          "equity_csv": "results/T_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ]
+  },
+  "best": {
+    "baseline": {
+      "seed": 8,
+      "ckpt": "checkpoints/T/utrans_T_baseline_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 3.0048012733459473,
+        "CAGR_%": 1.3677358627319336,
+        "Sharpe": 0.17921955788230598,
+        "MaxDD_%": -29.259761810302734,
+        "total_trades": 17,
+        "bh_final_return_%": -6.423920631408691,
+        "bh_CAGR_%": -3.0006587505340576,
+        "bh_Sharpe": 0.02347135803673519,
+        "bh_MaxDD_%": -32.008018493652344
+      },
+      "equity_csv": "results/T_baseline_equity.csv",
+      "metrics_json": "results/T_baseline_metrics.json"
+    },
+    "headline": {
+      "seed": 8,
+      "ckpt": "checkpoints/T/utrans_T_headline_best_seed8.pt",
+      "metrics": {
+        "final_return_%": -4.973316192626953,
+        "CAGR_%": -2.3135602474212646,
+        "Sharpe": 0.04340828794205284,
+        "MaxDD_%": -31.260517120361328,
+        "total_trades": 3,
+        "bh_final_return_%": -6.423920631408691,
+        "bh_CAGR_%": -3.0006587505340576,
+        "bh_Sharpe": 0.02347135803673519,
+        "bh_MaxDD_%": -32.008018493652344
+      },
+      "equity_csv": "results/T_headline_equity.csv",
+      "metrics_json": "results/T_headline_metrics.json"
+    },
+    "techsent": {
+      "seed": 8,
+      "ckpt": "checkpoints/T/utrans_T_techsent_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 1.3185381889343262,
+        "CAGR_%": 0.602877140045166,
+        "Sharpe": 0.14038556649204972,
+        "MaxDD_%": -30.232906341552734,
+        "total_trades": 47,
+        "bh_final_return_%": -6.423920631408691,
+        "bh_CAGR_%": -3.0006587505340576,
+        "bh_Sharpe": 0.02347135803673519,
+        "bh_MaxDD_%": -32.008018493652344
+      },
+      "equity_csv": "results/T_techsent_equity.csv",
+      "metrics_json": "results/T_techsent_metrics.json"
+    },
+    "all": {
+      "seed": 1111,
+      "ckpt": "checkpoints/T/utrans_T_all_best_seed1111.pt",
+      "metrics": {
+        "final_return_%": 5.17960786819458,
+        "CAGR_%": 2.3442506790161133,
+        "Sharpe": 0.21684038132598796,
+        "MaxDD_%": -31.11615753173828,
+        "total_trades": 5,
+        "bh_final_return_%": -6.423920631408691,
+        "bh_CAGR_%": -3.0006587505340576,
+        "bh_Sharpe": 0.02347135803673519,
+        "bh_MaxDD_%": -32.008018493652344
+      },
+      "equity_csv": "results/T_all_equity.csv",
+      "metrics_json": "results/T_all_metrics.json"
+    }
+  },
+  "combined_plot": "results/plots/T/combined_best_T.png",
+  "best_table_csv": "results/T_best_summary.csv"
+}

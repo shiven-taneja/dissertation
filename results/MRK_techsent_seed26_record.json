@@ -1,0 +1,46 @@
+{
+  "seed": 26,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_MRK_techsent_ee0.1_wl0.0_rw1_20250812-034037.pt",
+    "feature_dim": 2,
+    "ticker": "MRK",
+    "run_type": "techsent",
+    "seed": 26,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/MRK_techsent_seed26"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 0.26990175247192383,
+      "CAGR_%": 0.06345510482788086,
+      "Sharpe": 0.10429658347420766,
+      "MaxDD_%": -24.277755737304688,
+      "total_trades": 131,
+      "bh_final_return_%": 39.91987609863281,
+      "bh_CAGR_%": 8.22596549987793,
+      "bh_Sharpe": 0.4517707178275058,
+      "bh_MaxDD_%": -27.261507034301758
+    },
+    "metrics_path": "results/MRK_techsent_metrics.json",
+    "equity_csv": "results/MRK_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

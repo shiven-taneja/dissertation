@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_GOOG_headline_ee0.1_wl0.0_rw1_20250813-130025.pt",
+    "feature_dim": 8,
+    "ticker": "GOOG",
+    "run_type": "headline",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/GOOG_headline_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 13.588058471679688,
+      "CAGR_%": 9.141325950622559,
+      "Sharpe": 0.42845857980169955,
+      "MaxDD_%": -33.620243072509766,
+      "total_trades": 11,
+      "bh_final_return_%": 23.561359405517578,
+      "bh_CAGR_%": 15.633320808410645,
+      "bh_Sharpe": 0.5934196690682217,
+      "bh_MaxDD_%": -32.05568313598633
+    },
+    "metrics_path": "results/GOOG_headline_metrics.json",
+    "equity_csv": "results/GOOG_headline_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

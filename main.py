@@ -24,6 +24,8 @@ import matplotlib.pyplot as plt
 from train import train_one
 from evaluate import evaluate_one
 
+from fetch_data_groq import build_datasets_with_llm
+
 RUN_TYPES = ["baseline", "headline", "techsent", "all"]
 
 
@@ -201,7 +203,8 @@ def main():
 
     seeds = [8, 26, 1111] 
 
-    tickers = [ "BRK", "BABA", "GOOG", "KO", "MRK", "MS", "NVDA", "QQQ", "T", "WFC"]
+    # tickers = [ "DIS", "BABA", "GOOG", "KO", "MRK", "MS", "NVDA", "QQQ", "T", "WFC"]
+    tickers = ["DIS"]
 
 
     print("Tickers:", tickers)
@@ -228,4 +231,5 @@ def main():
 
 
 if __name__ == "__main__":
+    build_datasets_with_llm("DIS")  # Fetch data with LLM
     main()

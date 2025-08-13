@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_BABA_techsent_ee0.1_wl0.0_rw1_20250813-150924.pt",
+    "feature_dim": 5,
+    "ticker": "BABA",
+    "run_type": "techsent",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/BABA_techsent_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": -52.18871307373047,
+      "CAGR_%": -24.302936553955078,
+      "Sharpe": -0.4930500040576507,
+      "MaxDD_%": -54.586307525634766,
+      "total_trades": 76,
+      "bh_final_return_%": -66.85752868652344,
+      "bh_CAGR_%": -34.078128814697266,
+      "bh_Sharpe": -0.4501197861337538,
+      "bh_MaxDD_%": -74.11991119384766
+    },
+    "metrics_path": "results/BABA_techsent_metrics.json",
+    "equity_csv": "results/BABA_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

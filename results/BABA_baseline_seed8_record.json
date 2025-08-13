@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_BABA_baseline_ee0.1_wl0.0_rw1_20250813-135447.pt",
+    "feature_dim": 4,
+    "ticker": "BABA",
+    "run_type": "baseline",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/BABA_baseline_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": -62.416255950927734,
+      "CAGR_%": -30.87468147277832,
+      "Sharpe": -0.5944718335696149,
+      "MaxDD_%": -62.416255950927734,
+      "total_trades": 6,
+      "bh_final_return_%": -66.85752868652344,
+      "bh_CAGR_%": -34.078128814697266,
+      "bh_Sharpe": -0.4501197861337538,
+      "bh_MaxDD_%": -74.11991119384766
+    },
+    "metrics_path": "results/BABA_baseline_metrics.json",
+    "equity_csv": "results/BABA_baseline_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "seed": 26,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_WFC_techsent_ee0.1_wl0.0_rw1_20250812-170539.pt",
+    "feature_dim": 2,
+    "ticker": "WFC",
+    "run_type": "techsent",
+    "seed": 26,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/WFC_techsent_seed26"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": -30.881458282470703,
+      "CAGR_%": -9.95138931274414,
+      "Sharpe": -0.3486514072768429,
+      "MaxDD_%": -57.93253707885742,
+      "total_trades": 189,
+      "bh_final_return_%": 90.89045715332031,
+      "bh_CAGR_%": 20.139671325683594,
+      "bh_Sharpe": 0.6984164510828402,
+      "bh_MaxDD_%": -37.09705352783203
+    },
+    "metrics_path": "results/WFC_techsent_metrics.json",
+    "equity_csv": "results/WFC_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

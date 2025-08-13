@@ -1,0 +1,46 @@
+{
+  "seed": 1111,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_QQQ_all_ee0.1_wl0.0_rw1_20250812-133752.pt",
+    "feature_dim": 6,
+    "ticker": "QQQ",
+    "run_type": "all",
+    "seed": 1111,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/QQQ_all_seed1111"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 77.59687042236328,
+      "CAGR_%": 16.546953201293945,
+      "Sharpe": 0.9127126202123386,
+      "MaxDD_%": -29.418996810913086,
+      "total_trades": 9,
+      "bh_final_return_%": 93.6620864868164,
+      "bh_CAGR_%": 19.2690486907959,
+      "bh_Sharpe": 0.7763057417820997,
+      "bh_MaxDD_%": -35.11873245239258
+    },
+    "metrics_path": "results/QQQ_all_metrics.json",
+    "equity_csv": "results/QQQ_all_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

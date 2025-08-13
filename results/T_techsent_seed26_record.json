@@ -1,0 +1,46 @@
+{
+  "seed": 26,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_T_techsent_ee0.1_wl0.0_rw1_20250812-231725.pt",
+    "feature_dim": 5,
+    "ticker": "T",
+    "run_type": "techsent",
+    "seed": 26,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/T_techsent_seed26"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": -0.6274282932281494,
+      "CAGR_%": -0.28839111328125,
+      "Sharpe": 0.11060361289423425,
+      "MaxDD_%": -29.471450805664062,
+      "total_trades": 59,
+      "bh_final_return_%": -6.423920631408691,
+      "bh_CAGR_%": -3.0006587505340576,
+      "bh_Sharpe": 0.02347135803673519,
+      "bh_MaxDD_%": -32.008018493652344
+    },
+    "metrics_path": "results/T_techsent_metrics.json",
+    "equity_csv": "results/T_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

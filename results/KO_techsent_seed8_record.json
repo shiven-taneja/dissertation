@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_KO_techsent_ee0.1_wl0.0_rw1_20250812-000923.pt",
+    "feature_dim": 2,
+    "ticker": "KO",
+    "run_type": "techsent",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/KO_techsent_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 2.1564602851867676,
+      "CAGR_%": 0.5004644393920898,
+      "Sharpe": 0.11990781641449796,
+      "MaxDD_%": -36.887733459472656,
+      "total_trades": 250,
+      "bh_final_return_%": 22.78536605834961,
+      "bh_CAGR_%": 4.92016077041626,
+      "bh_Sharpe": 0.32983995797352333,
+      "bh_MaxDD_%": -36.987510681152344
+    },
+    "metrics_path": "results/KO_techsent_metrics.json",
+    "equity_csv": "results/KO_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_GOOG_techsent_ee0.1_wl0.0_rw1_20250813-131700.pt",
+    "feature_dim": 5,
+    "ticker": "GOOG",
+    "run_type": "techsent",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/GOOG_techsent_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 21.967077255249023,
+      "CAGR_%": 14.606893539428711,
+      "Sharpe": 0.5700397229287829,
+      "MaxDD_%": -32.02713394165039,
+      "total_trades": 1,
+      "bh_final_return_%": 23.561359405517578,
+      "bh_CAGR_%": 15.633320808410645,
+      "bh_Sharpe": 0.5934196690682217,
+      "bh_MaxDD_%": -32.05568313598633
+    },
+    "metrics_path": "results/GOOG_techsent_metrics.json",
+    "equity_csv": "results/GOOG_techsent_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

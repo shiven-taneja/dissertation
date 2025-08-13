@@ -1,0 +1,46 @@
+{
+  "seed": 1111,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_WFC_all_ee0.1_wl0.0_rw1_20250812-175925.pt",
+    "feature_dim": 6,
+    "ticker": "WFC",
+    "run_type": "all",
+    "seed": 1111,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/WFC_all_seed1111"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 29.424440383911133,
+      "CAGR_%": 7.5945258140563965,
+      "Sharpe": 0.39208861279501883,
+      "MaxDD_%": -41.1989860534668,
+      "total_trades": 32,
+      "bh_final_return_%": 90.89045715332031,
+      "bh_CAGR_%": 20.139671325683594,
+      "bh_Sharpe": 0.6984164510828402,
+      "bh_MaxDD_%": -37.09705352783203
+    },
+    "metrics_path": "results/WFC_all_metrics.json",
+    "equity_csv": "results/WFC_all_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

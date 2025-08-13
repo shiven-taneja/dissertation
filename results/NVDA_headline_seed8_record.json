@@ -1,0 +1,46 @@
+{
+  "seed": 8,
+  "train": {
+    "ckpt_path": "checkpoints/utrans_NVDA_headline_ee0.1_wl0.0_rw1_20250813-004755.pt",
+    "feature_dim": 8,
+    "ticker": "NVDA",
+    "run_type": "headline",
+    "seed": 8,
+    "hparams": {
+      "commission_rate": 0.001,
+      "investment_capacity": 500,
+      "epochs": 50,
+      "window_size": 12,
+      "lr": 0.001,
+      "batch_size": 20,
+      "gamma": 0.99,
+      "replay_memory_size": 10000,
+      "target_update_freq": 500,
+      "epsilon_start": 1.0,
+      "epsilon_end": 0.1,
+      "epsilon_decay": 0.99,
+      "weight_loss_coef": 0.0,
+      "rand_weights": true
+    },
+    "logdir": "runs/NVDA_headline_seed8"
+  },
+  "eval": {
+    "metrics": {
+      "final_return_%": 597.972412109375,
+      "CAGR_%": 67.67976379394531,
+      "Sharpe": 1.2648032903279458,
+      "MaxDD_%": -66.58454895019531,
+      "total_trades": 87,
+      "bh_final_return_%": 637.6282348632812,
+      "bh_CAGR_%": 70.16294860839844,
+      "bh_Sharpe": 1.2394174200514225,
+      "bh_MaxDD_%": -66.33509063720703
+    },
+    "metrics_path": "results/NVDA_headline_metrics.json",
+    "equity_csv": "results/NVDA_headline_equity.csv",
+    "plots": {
+      "equity_png": null,
+      "actions_png": null
+    }
+  }
+}

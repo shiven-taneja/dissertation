@@ -1,0 +1,643 @@
+{
+  "ticker": "KO",
+  "selection_metric": "final_return_%",
+  "seeds": [
+    8,
+    26,
+    1111
+  ],
+  "experiments": {
+    "baseline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_baseline_ee0.1_wl0.0_rw1_20250811-223137.pt",
+          "feature_dim": 1,
+          "ticker": "KO",
+          "run_type": "baseline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_baseline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -11.767130851745605,
+            "CAGR_%": -2.8867781162261963,
+            "Sharpe": -0.11162455767193193,
+            "MaxDD_%": -35.126731872558594,
+            "total_trades": 299,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_baseline_metrics.json",
+          "equity_csv": "results/KO_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_baseline_ee0.1_wl0.0_rw1_20250811-224752.pt",
+          "feature_dim": 1,
+          "ticker": "KO",
+          "run_type": "baseline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_baseline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 24.164581298828125,
+            "CAGR_%": 5.194735527038574,
+            "Sharpe": 0.34453042903897324,
+            "MaxDD_%": -36.660247802734375,
+            "total_trades": 17,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_baseline_metrics.json",
+          "equity_csv": "results/KO_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_baseline_ee0.1_wl0.0_rw1_20250811-230413.pt",
+          "feature_dim": 1,
+          "ticker": "KO",
+          "run_type": "baseline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_baseline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": -17.885583877563477,
+            "CAGR_%": -4.506134986877441,
+            "Sharpe": -0.2652818033245623,
+            "MaxDD_%": -32.92708206176758,
+            "total_trades": 39,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_baseline_metrics.json",
+          "equity_csv": "results/KO_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "headline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_headline_ee0.1_wl0.0_rw1_20250811-232031.pt",
+          "feature_dim": 5,
+          "ticker": "KO",
+          "run_type": "headline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_headline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 21.527862548828125,
+            "CAGR_%": 4.6677350997924805,
+            "Sharpe": 0.32229864393329083,
+            "MaxDD_%": -36.66138458251953,
+            "total_trades": 30,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_headline_metrics.json",
+          "equity_csv": "results/KO_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_headline_ee0.1_wl0.0_rw1_20250811-233649.pt",
+          "feature_dim": 5,
+          "ticker": "KO",
+          "run_type": "headline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_headline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 53.146934509277344,
+            "CAGR_%": 10.487329483032227,
+            "Sharpe": 0.7670705998373699,
+            "MaxDD_%": -12.953333854675293,
+            "total_trades": 47,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_headline_metrics.json",
+          "equity_csv": "results/KO_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_headline_ee0.1_wl0.0_rw1_20250811-235307.pt",
+          "feature_dim": 5,
+          "ticker": "KO",
+          "run_type": "headline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_headline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 12.640023231506348,
+            "CAGR_%": 2.8241872787475586,
+            "Sharpe": 0.2382056851318442,
+            "MaxDD_%": -36.972354888916016,
+            "total_trades": 127,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_headline_metrics.json",
+          "equity_csv": "results/KO_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "techsent": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_techsent_ee0.1_wl0.0_rw1_20250812-000923.pt",
+          "feature_dim": 2,
+          "ticker": "KO",
+          "run_type": "techsent",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_techsent_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 2.1564602851867676,
+            "CAGR_%": 0.5004644393920898,
+            "Sharpe": 0.11990781641449796,
+            "MaxDD_%": -36.887733459472656,
+            "total_trades": 250,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_techsent_metrics.json",
+          "equity_csv": "results/KO_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_techsent_ee0.1_wl0.0_rw1_20250812-002543.pt",
+          "feature_dim": 2,
+          "ticker": "KO",
+          "run_type": "techsent",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_techsent_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 29.04229164123535,
+            "CAGR_%": 6.147456169128418,
+            "Sharpe": 0.38850006374882223,
+            "MaxDD_%": -36.92460632324219,
+            "total_trades": 31,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_techsent_metrics.json",
+          "equity_csv": "results/KO_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_techsent_ee0.1_wl0.0_rw1_20250812-004200.pt",
+          "feature_dim": 2,
+          "ticker": "KO",
+          "run_type": "techsent",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_techsent_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 26.8923397064209,
+            "CAGR_%": 5.730986595153809,
+            "Sharpe": 0.49539249078819647,
+            "MaxDD_%": -17.154979705810547,
+            "total_trades": 43,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_techsent_metrics.json",
+          "equity_csv": "results/KO_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "all": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_all_ee0.1_wl0.0_rw1_20250812-005822.pt",
+          "feature_dim": 6,
+          "ticker": "KO",
+          "run_type": "all",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_all_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 22.771608352661133,
+            "CAGR_%": 4.917407035827637,
+            "Sharpe": 0.32988346240849653,
+            "MaxDD_%": -36.95393371582031,
+            "total_trades": 1,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_all_metrics.json",
+          "equity_csv": "results/KO_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_all_ee0.1_wl0.0_rw1_20250812-011441.pt",
+          "feature_dim": 6,
+          "ticker": "KO",
+          "run_type": "all",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_all_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 25.9117488861084,
+            "CAGR_%": 5.539238452911377,
+            "Sharpe": 0.35771082762815676,
+            "MaxDD_%": -36.95393371582031,
+            "total_trades": 27,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_all_metrics.json",
+          "equity_csv": "results/KO_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_KO_all_ee0.1_wl0.0_rw1_20250812-013100.pt",
+          "feature_dim": 6,
+          "ticker": "KO",
+          "run_type": "all",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/KO_all_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 22.771608352661133,
+            "CAGR_%": 4.917407035827637,
+            "Sharpe": 0.32988346240849653,
+            "MaxDD_%": -36.95393371582031,
+            "total_trades": 1,
+            "bh_final_return_%": 22.78536605834961,
+            "bh_CAGR_%": 4.92016077041626,
+            "bh_Sharpe": 0.32983995797352333,
+            "bh_MaxDD_%": -36.987510681152344
+          },
+          "metrics_path": "results/KO_all_metrics.json",
+          "equity_csv": "results/KO_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ]
+  },
+  "best": {
+    "baseline": {
+      "seed": 26,
+      "ckpt": "checkpoints/KO/utrans_KO_baseline_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 24.164581298828125,
+        "CAGR_%": 5.194735527038574,
+        "Sharpe": 0.34453042903897324,
+        "MaxDD_%": -36.660247802734375,
+        "total_trades": 17,
+        "bh_final_return_%": 22.78536605834961,
+        "bh_CAGR_%": 4.92016077041626,
+        "bh_Sharpe": 0.32983995797352333,
+        "bh_MaxDD_%": -36.987510681152344
+      },
+      "equity_csv": "results/KO_baseline_equity.csv",
+      "metrics_json": "results/KO_baseline_metrics.json"
+    },
+    "headline": {
+      "seed": 26,
+      "ckpt": "checkpoints/KO/utrans_KO_headline_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 53.146934509277344,
+        "CAGR_%": 10.487329483032227,
+        "Sharpe": 0.7670705998373699,
+        "MaxDD_%": -12.953333854675293,
+        "total_trades": 47,
+        "bh_final_return_%": 22.78536605834961,
+        "bh_CAGR_%": 4.92016077041626,
+        "bh_Sharpe": 0.32983995797352333,
+        "bh_MaxDD_%": -36.987510681152344
+      },
+      "equity_csv": "results/KO_headline_equity.csv",
+      "metrics_json": "results/KO_headline_metrics.json"
+    },
+    "techsent": {
+      "seed": 26,
+      "ckpt": "checkpoints/KO/utrans_KO_techsent_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 29.04229164123535,
+        "CAGR_%": 6.147456169128418,
+        "Sharpe": 0.38850006374882223,
+        "MaxDD_%": -36.92460632324219,
+        "total_trades": 31,
+        "bh_final_return_%": 22.78536605834961,
+        "bh_CAGR_%": 4.92016077041626,
+        "bh_Sharpe": 0.32983995797352333,
+        "bh_MaxDD_%": -36.987510681152344
+      },
+      "equity_csv": "results/KO_techsent_equity.csv",
+      "metrics_json": "results/KO_techsent_metrics.json"
+    },
+    "all": {
+      "seed": 26,
+      "ckpt": "checkpoints/KO/utrans_KO_all_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 25.9117488861084,
+        "CAGR_%": 5.539238452911377,
+        "Sharpe": 0.35771082762815676,
+        "MaxDD_%": -36.95393371582031,
+        "total_trades": 27,
+        "bh_final_return_%": 22.78536605834961,
+        "bh_CAGR_%": 4.92016077041626,
+        "bh_Sharpe": 0.32983995797352333,
+        "bh_MaxDD_%": -36.987510681152344
+      },
+      "equity_csv": "results/KO_all_equity.csv",
+      "metrics_json": "results/KO_all_metrics.json"
+    }
+  },
+  "combined_plot": "results/plots/KO/combined_best_KO.png",
+  "best_table_csv": "results/KO_best_summary.csv"
+}

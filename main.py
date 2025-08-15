@@ -24,8 +24,6 @@ import matplotlib.pyplot as plt
 from train import train_one
 from evaluate import evaluate_one
 
-from fetch_data_groq import build_datasets_with_llm
-
 RUN_TYPES = ["baseline", "headline", "techsent", "all"]
 
 
@@ -231,5 +229,4 @@ def main():
 
 
 if __name__ == "__main__":
-    build_datasets_with_llm("GE")  # Fetch data with LLM
-    # main()
+    main()

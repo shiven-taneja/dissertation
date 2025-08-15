@@ -1,0 +1,643 @@
+{
+  "ticker": "GE",
+  "selection_metric": "final_return_%",
+  "seeds": [
+    8,
+    26,
+    1111
+  ],
+  "experiments": {
+    "baseline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_baseline_ee0.1_wl0.0_rw1_20250814-182559.pt",
+          "feature_dim": 4,
+          "ticker": "GE",
+          "run_type": "baseline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_baseline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 160.6120147705078,
+            "CAGR_%": 32.26850128173828,
+            "Sharpe": 1.305506381138926,
+            "MaxDD_%": -26.398521423339844,
+            "total_trades": 41,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_baseline_metrics.json",
+          "equity_csv": "results/GE_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_baseline_ee0.1_wl0.0_rw1_20250814-183908.pt",
+          "feature_dim": 4,
+          "ticker": "GE",
+          "run_type": "baseline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_baseline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 99.02214050292969,
+            "CAGR_%": 22.255718231201172,
+            "Sharpe": 0.8113515789395012,
+            "MaxDD_%": -47.726409912109375,
+            "total_trades": 13,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_baseline_metrics.json",
+          "equity_csv": "results/GE_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_baseline_ee0.1_wl0.0_rw1_20250814-185211.pt",
+          "feature_dim": 4,
+          "ticker": "GE",
+          "run_type": "baseline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_baseline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 134.80816650390625,
+            "CAGR_%": 28.302705764770508,
+            "Sharpe": 1.0196970166080483,
+            "MaxDD_%": -44.751991271972656,
+            "total_trades": 34,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_baseline_metrics.json",
+          "equity_csv": "results/GE_baseline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "headline": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_headline_ee0.1_wl0.0_rw1_20250814-190511.pt",
+          "feature_dim": 8,
+          "ticker": "GE",
+          "run_type": "headline",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_headline_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 140.3723907470703,
+            "CAGR_%": 29.183042526245117,
+            "Sharpe": 0.9611507033527065,
+            "MaxDD_%": -50.87664794921875,
+            "total_trades": 17,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_headline_metrics.json",
+          "equity_csv": "results/GE_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_headline_ee0.1_wl0.0_rw1_20250814-191814.pt",
+          "feature_dim": 8,
+          "ticker": "GE",
+          "run_type": "headline",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_headline_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 172.8455810546875,
+            "CAGR_%": 34.05194091796875,
+            "Sharpe": 1.0534887534467223,
+            "MaxDD_%": -47.5174446105957,
+            "total_trades": 3,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_headline_metrics.json",
+          "equity_csv": "results/GE_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_headline_ee0.1_wl0.0_rw1_20250814-193121.pt",
+          "feature_dim": 8,
+          "ticker": "GE",
+          "run_type": "headline",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_headline_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 209.2220001220703,
+            "CAGR_%": 39.04087448120117,
+            "Sharpe": 1.2582043662538964,
+            "MaxDD_%": -34.898963928222656,
+            "total_trades": 25,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_headline_metrics.json",
+          "equity_csv": "results/GE_headline_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "techsent": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_techsent_ee0.1_wl0.0_rw1_20250814-194426.pt",
+          "feature_dim": 5,
+          "ticker": "GE",
+          "run_type": "techsent",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_techsent_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 203.9075927734375,
+            "CAGR_%": 38.338897705078125,
+            "Sharpe": 1.305770503858038,
+            "MaxDD_%": -38.50702667236328,
+            "total_trades": 44,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_techsent_metrics.json",
+          "equity_csv": "results/GE_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_techsent_ee0.1_wl0.0_rw1_20250814-195734.pt",
+          "feature_dim": 5,
+          "ticker": "GE",
+          "run_type": "techsent",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_techsent_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 175.8136444091797,
+            "CAGR_%": 34.47606658935547,
+            "Sharpe": 1.0655885174351147,
+            "MaxDD_%": -48.871395111083984,
+            "total_trades": 7,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_techsent_metrics.json",
+          "equity_csv": "results/GE_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_techsent_ee0.1_wl0.0_rw1_20250814-201043.pt",
+          "feature_dim": 5,
+          "ticker": "GE",
+          "run_type": "techsent",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_techsent_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 190.07058715820312,
+            "CAGR_%": 36.469482421875,
+            "Sharpe": 1.1514906088416106,
+            "MaxDD_%": -45.8658561706543,
+            "total_trades": 7,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_techsent_metrics.json",
+          "equity_csv": "results/GE_techsent_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ],
+    "all": [
+      {
+        "seed": 8,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_all_ee0.1_wl0.0_rw1_20250814-202354.pt",
+          "feature_dim": 9,
+          "ticker": "GE",
+          "run_type": "all",
+          "seed": 8,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_all_seed8"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 170.08738708496094,
+            "CAGR_%": 33.654869079589844,
+            "Sharpe": 1.1047566873462509,
+            "MaxDD_%": -45.82844543457031,
+            "total_trades": 15,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_all_metrics.json",
+          "equity_csv": "results/GE_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 26,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_all_ee0.1_wl0.0_rw1_20250814-203702.pt",
+          "feature_dim": 9,
+          "ticker": "GE",
+          "run_type": "all",
+          "seed": 26,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_all_seed26"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 185.48304748535156,
+            "CAGR_%": 35.835777282714844,
+            "Sharpe": 1.0924534571951736,
+            "MaxDD_%": -46.52314376831055,
+            "total_trades": 1,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_all_metrics.json",
+          "equity_csv": "results/GE_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      },
+      {
+        "seed": 1111,
+        "train": {
+          "ckpt_path": "checkpoints/utrans_GE_all_ee0.1_wl0.0_rw1_20250814-205014.pt",
+          "feature_dim": 9,
+          "ticker": "GE",
+          "run_type": "all",
+          "seed": 1111,
+          "hparams": {
+            "commission_rate": 0.001,
+            "investment_capacity": 500,
+            "epochs": 50,
+            "window_size": 12,
+            "lr": 0.001,
+            "batch_size": 20,
+            "gamma": 0.99,
+            "replay_memory_size": 10000,
+            "target_update_freq": 500,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.1,
+            "epsilon_decay": 0.99,
+            "weight_loss_coef": 0.0,
+            "rand_weights": true
+          },
+          "logdir": "runs/GE_all_seed1111"
+        },
+        "eval": {
+          "metrics": {
+            "final_return_%": 185.48304748535156,
+            "CAGR_%": 35.835777282714844,
+            "Sharpe": 1.0924534571951736,
+            "MaxDD_%": -46.52314376831055,
+            "total_trades": 1,
+            "bh_final_return_%": 197.37649536132812,
+            "bh_CAGR_%": 37.46421432495117,
+            "bh_Sharpe": 1.121540330312544,
+            "bh_MaxDD_%": -46.545467376708984
+          },
+          "metrics_path": "results/GE_all_metrics.json",
+          "equity_csv": "results/GE_all_equity.csv",
+          "plots": {
+            "equity_png": null,
+            "actions_png": null
+          }
+        }
+      }
+    ]
+  },
+  "best": {
+    "baseline": {
+      "seed": 8,
+      "ckpt": "checkpoints/GE/utrans_GE_baseline_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 160.6120147705078,
+        "CAGR_%": 32.26850128173828,
+        "Sharpe": 1.305506381138926,
+        "MaxDD_%": -26.398521423339844,
+        "total_trades": 41,
+        "bh_final_return_%": 197.37649536132812,
+        "bh_CAGR_%": 37.46421432495117,
+        "bh_Sharpe": 1.121540330312544,
+        "bh_MaxDD_%": -46.545467376708984
+      },
+      "equity_csv": "results/GE_baseline_equity.csv",
+      "metrics_json": "results/GE_baseline_metrics.json"
+    },
+    "headline": {
+      "seed": 1111,
+      "ckpt": "checkpoints/GE/utrans_GE_headline_best_seed1111.pt",
+      "metrics": {
+        "final_return_%": 209.2220001220703,
+        "CAGR_%": 39.04087448120117,
+        "Sharpe": 1.2582043662538964,
+        "MaxDD_%": -34.898963928222656,
+        "total_trades": 25,
+        "bh_final_return_%": 197.37649536132812,
+        "bh_CAGR_%": 37.46421432495117,
+        "bh_Sharpe": 1.121540330312544,
+        "bh_MaxDD_%": -46.545467376708984
+      },
+      "equity_csv": "results/GE_headline_equity.csv",
+      "metrics_json": "results/GE_headline_metrics.json"
+    },
+    "techsent": {
+      "seed": 8,
+      "ckpt": "checkpoints/GE/utrans_GE_techsent_best_seed8.pt",
+      "metrics": {
+        "final_return_%": 203.9075927734375,
+        "CAGR_%": 38.338897705078125,
+        "Sharpe": 1.305770503858038,
+        "MaxDD_%": -38.50702667236328,
+        "total_trades": 44,
+        "bh_final_return_%": 197.37649536132812,
+        "bh_CAGR_%": 37.46421432495117,
+        "bh_Sharpe": 1.121540330312544,
+        "bh_MaxDD_%": -46.545467376708984
+      },
+      "equity_csv": "results/GE_techsent_equity.csv",
+      "metrics_json": "results/GE_techsent_metrics.json"
+    },
+    "all": {
+      "seed": 26,
+      "ckpt": "checkpoints/GE/utrans_GE_all_best_seed26.pt",
+      "metrics": {
+        "final_return_%": 185.48304748535156,
+        "CAGR_%": 35.835777282714844,
+        "Sharpe": 1.0924534571951736,
+        "MaxDD_%": -46.52314376831055,
+        "total_trades": 1,
+        "bh_final_return_%": 197.37649536132812,
+        "bh_CAGR_%": 37.46421432495117,
+        "bh_Sharpe": 1.121540330312544,
+        "bh_MaxDD_%": -46.545467376708984
+      },
+      "equity_csv": "results/GE_all_equity.csv",
+      "metrics_json": "results/GE_all_metrics.json"
+    }
+  },
+  "combined_plot": "results/plots/GE/combined_best_GE.png",
+  "best_table_csv": "results/GE_best_summary.csv"
+}

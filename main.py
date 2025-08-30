@@ -1,15 +1,3 @@
-# ============================
-# file: run_ablation.py
-# ============================
-"""
-Ablation runner that:
-- Discovers tickers under data/<TICKER> (having train.csv & test.csv)
-- For each ticker, runs 4 experiments (baseline, headline, techsent, all)
-- Each experiment runs N seeds (default 3) and picks the best model by a metric
-- Copies **only the best** checkpoints into checkpoints/<TICKER>/
-- Creates plots **only for the best** of each experiment and a combined plot vs B&H
-- Writes manifests and summaries suitable for a paper
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -139,7 +127,6 @@ def run_for_ticker(
         rt: pick_best(exp_records[rt], selection_metric) for rt in RUN_TYPES
     }
 
-    # 3) copy best checkpoints and **create plots only for best**
     best_ckpt_dir = Path(checkpoints_root) / ticker
     best_ckpt_dir.mkdir(parents=True, exist_ok=True)
     best_ckpts = {}
@@ -148,20 +135,6 @@ def run_for_ticker(
         dst = best_ckpt_dir / (f"utrans_{ticker}_{rt}_best_seed{rec['seed']}.pt")
         copy2(src, dst)
         best_ckpts[rt] = str(dst)
-
-        # re-evaluate best with plots enabled
-        _ = evaluate_one(
-            ticker=ticker,
-            run_type=rt,
-            test_csv=test_csv,
-            ckpt_path=dst,
-            save_plots=True,
-        )
-
-    # 4) combined plot
-    combined_png = plot_combined_best(
-        ticker=ticker, best_by_type=best_by_type, results_root=results_root
-    )
 
     # 5) aggregate table (best runs only)
     rows = []
@@ -185,7 +158,6 @@ def run_for_ticker(
             "equity_csv": rec["eval"]["equity_csv"],
             "metrics_json": rec["eval"]["metrics_path"],
         } for rt, rec in best_by_type.items()},
-        "combined_plot": combined_png,
         "best_table_csv": str(table_csv),
     }
 

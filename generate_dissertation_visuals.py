@@ -1,22 +1,3 @@
-# ===============================================================
-# file: generate_dissertation_visuals.py
-# ===============================================================
-"""
-Generates all metrics and graphics for the dissertation's 
-'Results and Analysis' chapter.
-
-This script performs the following steps:
-1.  Iterates through all specified tickers and model types.
-2.  Runs an evaluation for each model, collecting performance data.
-    - Includes a critical fix for Buy & Hold equity curve alignment.
-3.  Aggregates results across all tickers.
-4.  Generates and saves all required plots to a structured 'diss_plots' directory:
-    - Individual & Combined Equity Curves
-    - Comparative Bar Charts (Sharpe, CAGR, MDD)
-    - Performance Distribution Box Plots
-    - Market Regime Performance Analysis
-5.  Generates and saves a master CSV table with aggregate metrics.
-"""
 import json
 import warnings
 from pathlib import Path

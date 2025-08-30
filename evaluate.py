@@ -1,13 +1,3 @@
-# ============================
-# file: evaluate.py
-# ============================
-"""
-Evaluation utility. Date handling:
-- Reads CSV, moves `date` to DatetimeIndex (ISO or epoch ms/sec supported).
-- Uses this index for pricing periods and metrics.
-
-It can optionally save plots (only enabled for *best* runs by the ablation runner).
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -162,56 +152,6 @@ def evaluate_one(
         "bh_equity": bh_equity,
     }).to_csv(out_csv, index=False)
 
-    eq_png = act_png = None
-    if save_plots:
-        # equity vs B&H (best runs only)
-        plt.figure(figsize=(12, 6))
-        plt.plot(dates, equity, label=f"DRL-UTrans ({run_type})", linewidth=2)
-        plt.plot(dates, bh_equity, label="Buy&Hold", alpha=0.8)
-        plt.ylabel("Portfolio Value ($)")
-        plt.title(f"Equity Curve – {ticker} ({run_type})")
-        plt.legend(); plt.grid(True, alpha=0.3)
-        eq_png = plots_dir / f"equity_{ticker}_{run_type}.png"
-        plt.tight_layout(); plt.savefig(eq_png, dpi=150); plt.close()
-
-        # optional actions plot for best only
-        buy_idx = [i for i, a in enumerate(actions) if a == 0]
-        sell_idx = [i for i, a in enumerate(actions) if a == 1]
-        plt.figure(figsize=(12, 6))
-        plt.plot(prices[: len(actions)], label="Price", alpha=0.7)
-        if buy_idx:
-            plt.scatter(buy_idx, [prices[i] for i in buy_idx], marker='^', s=30, label='Buy')
-        if sell_idx:
-            plt.scatter(sell_idx, [prices[i] for i in sell_idx], marker='v', s=30, label='Sell')
-        plt.title(f"Trading Actions – {ticker} ({run_type})")
-        plt.xlabel("Time Step"); plt.ylabel("Price ($)")
-        plt.legend(); plt.grid(True, alpha=0.3)
-        act_png = plots_dir / f"actions_{ticker}_{run_type}.png"
-        plt.tight_layout(); plt.savefig(act_png, dpi=150); plt.close()
-
-        if train_csv is not None and Path(train_csv).exists():
-            df_train = pd.read_csv(train_csv)
-            s = df_train["date"]
-            idx = pd.to_datetime(s, errors="coerce")
-            df_train = df_train.drop(columns=["date"])  # keep date only as index
-            df_train.index = idx
-            full_prices = pd.concat([df_train["close"], df_test["close"]])
-            full_dates = full_prices.index
-            # scale B&H to start at same cash as model equity
-            cash0 = float(equity[0])
-            full_bh_equity = cash0 * (full_prices / full_prices.iloc[0]).to_numpy()
-            test_start, test_end = df_test.index[0], df_test.index[-1]
-
-            fig, ax = plt.subplots(figsize=(12, 6))
-            ax.plot(full_dates, full_bh_equity, label="Buy&Hold (full)", linewidth=1.3)
-            ax.plot(dates, equity, label=f"DRL-UTrans ({run_type}) – test", linewidth=2)
-            ax.axvspan(test_start, test_end, alpha=0.12, label="Test period")
-            ax.set_ylabel("Portfolio Value ($)")
-            ax.set_title(f"{ticker} ({run_type})")
-            ax.legend(); ax.grid(True, alpha=0.3)
-            ctx_png = plots_dir / f"context_equity_{ticker}_{run_type}.png"
-            fig.tight_layout(); fig.savefig(ctx_png, dpi=150); plt.close(fig)
-
     # metrics json
     metrics_path = results_root / f"{ticker}_{run_type}_metrics.json"
     with metrics_path.open("w") as f:
@@ -222,7 +162,6 @@ def evaluate_one(
         "equity": equity,
         "bh_equity": bh_equity,
         "dates": dates,
-        "plots": {"equity_png": str(eq_png) if eq_png else None, "actions_png": str(act_png) if act_png else None},
         "metrics_path": str(metrics_path),
         "equity_csv": str(out_csv),
     }
